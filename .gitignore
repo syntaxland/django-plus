@@ -122,6 +122,8 @@ venv.bak/
 /site
 
 staticfiles/
+media/videos
+static/images
 
 # mypy
 .mypy_cache/
