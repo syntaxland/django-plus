@@ -1,6 +1,9 @@
 # Create your models here.
 from django.db import models
+
 from twilio.rest import Client
+from django.conf import settings
+
 
 class UserPost(models.Model):
     name = models.CharField(max_length=255)
@@ -20,23 +23,23 @@ class Score(models.Model):
         return str(self.result)
     
     def save(self, *args, **kwargs):
-        account_sid = 'AC304ec90f56320d8b1338d59d9f58d18f'
-        auth_token = 'cf83b37043c8e772add73c12a93c6daf'
+        account_sid = settings.TWILIO_ACCOUNT_SID # 'AC304ec90f56320d8b1338d59d9f58d18f'
+        auth_token = settings.TWILIO_AUTH_TOKEN # 'f9a7c3c1d429b74fcbd5a4627ab8c529'
         client = Client(account_sid, auth_token)
         
         if self.result < 70:           
             message = client.messages.create(
                     body=f'Result not looking good - {self.result}',
-                    from_='+16729060244',
+                    from_=settings.TWILIO_PHONE_NUMBER,
                     to='+2349066167293'
                 )
             print(message.sid)
         else:
             message = client.messages.create(
                     body=f'Good to go at: {self.result}',
-                    from_='+16729060244',
-                    to='+2349066167293'
+                    from_=settings.TWILIO_PHONE_NUMBER,
+                    to=settings.MY_PHONE_NUMBER
                 )
             print(message.sid)
 
-            return super().save(*args, **kwargs)
+        return super().save(*args, **kwargs)
