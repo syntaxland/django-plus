@@ -1,0 +1,20 @@
+{% comment %} {% load socialaccount %}
+<html>
+<body>
+<h1>Google Login</h1>
+{% if user.is_authenticated %}
+  <p>Welcome, You are logged in as {{ user.username }}</p>
+{% else %}
+  <a href="{% provider_login_url 'google' %}">Login With Google</a>
+{% endif %}
+</body>
+</html> {% endcomment %}
+
+{{ captcha }}
+
+{% comment %} <form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  {{ form.captcha.as_widget }}
+  <button type="submit">Submit</button>
+</form> {% endcomment %}

@@ -1,0 +1,19 @@
+
+<form method="post" action="{% url 'send_email' %}" enctype="multipart/form-data">
+{% comment %} <form method="post" action="" enctype="multipart/form-data"> {% endcomment %}
+
+    {% csrf_token %}
+    <label for="sender_email">Sender email:</label>
+    <input type="email" name="sender_email" required><br><br>
+
+    <label for="receiver_email">Receiver email:</label>
+    <input type="email" name="receiver_email" required><br><br>
+
+    <label for="subject">Subject:</label>
+    <input type="text" name="subject" required><br><br>
+
+    <label for="message">Message:</label><br>
+    <textarea name="message" required></textarea><br><br>
+
+    <input type="submit" value="Send email">
+</form>
