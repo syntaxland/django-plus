@@ -23,23 +23,25 @@ class Score(models.Model):
         return str(self.result)
     
     def save(self, *args, **kwargs):
-        account_sid = settings.TWILIO_ACCOUNT_SID # 'AC304ec90f56320d8b1338d59d9f58d18f'
-        auth_token = settings.TWILIO_AUTH_TOKEN # 'f9a7c3c1d429b74fcbd5a4627ab8c529'
+        account_sid = settings.TWILIO_ACCOUNT_SID 
+        auth_token = settings.TWILIO_AUTH_TOKEN 
         client = Client(account_sid, auth_token)
         
-        if self.result < 70:           
+        if 100000 <= self.result <= 999999:           
             message = client.messages.create(
-                    body=f'Result not looking good - {self.result}',
+                    body=f'Correct OTP: {self.result}',
                     from_=settings.TWILIO_PHONE_NUMBER,
                     to='+2349066167293'
                 )
             print(message.sid)
+            print("Correct OTP sent successfully!")
         else:
             message = client.messages.create(
-                    body=f'Good to go at: {self.result}',
+                    body=f'Wrong OTP: {self.result}',
                     from_=settings.TWILIO_PHONE_NUMBER,
                     to=settings.MY_PHONE_NUMBER
                 )
             print(message.sid)
+            print("Wrong OTP sent successfully!")
 
         return super().save(*args, **kwargs)
