@@ -1,0 +1,19 @@
+
+<style>
+    h3 {
+      color: red;
+    }
+</style>
+  
+{% for message in messages %}
+<h3>{{message}}</h3>
+{% endfor %}
+
+<p>Enter the OTP sent to {{ email }}:</p>
+
+<form method="post" action="{% url 'verify_email' %}">    
+    {% csrf_token %}
+    <label for="otp">Email Vrification:</label>
+    <input type="number" name="otp" id="otp" placeholder="Enter OTP" ><br><br>
+    <input type="submit" value="Verify Email">
+</form>

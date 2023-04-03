@@ -1,16 +1,9 @@
 <html>
-<head>
-<title>Mailer</title>
-</head>
-<body>
-<div class="row">
-  <div class="col-md-4"></div>
-  <div class="col-md-4">
-    <div class="card mt-5">
-
-
-      <div class="card-body">
-        <div class="card-title py-3">
+  <head>
+    <title>Mailer</title>
+  </head>
+  <body>
+      <div class="card-title py-3">
           <h4>Mailer API</h4>
         </div>
 
@@ -95,52 +88,8 @@
           value="Send" 
           class="btn btn-block btn-primary submit-btn" 
           />
-
-        {% comment %} sender_name = request.POST.get('sender_name')
-        sender_email = request.POST.get('sender_email')
-        to_email = request.POST.get('to_email')
-        to_name = request.POST.get('to_name')
-        subject = request.POST.get('subject')
-        message = request.POST.get('message') {% endcomment %}
-
-          {% comment %} <div class="invalid_feedback invalid-feedback" style="display:none"> </div>
-          <p class="text-sm text-success usernameSuccessOutput"></p>
-          <div class="form-group">
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              class="form-control form-control-sm"
-              id="emailField"
-              value="{{fieldValues.email}}"
-              value="{{user.email}}"
-            />
-          </div> {% endcomment %}
-
-          {% comment %} <div class="emailFeedBackArea invalid-feedback" style="display:none"> </div>
-          <div class="form-group">
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              class="form-control form-control-sm"
-              id="passwordField"
-            />
-            <small class="float-right py-3 showPasswordToggle">SHOW</small>
-          </div> {% endcomment %}
-
-          
-
         </form>
-
-      </div>
-
-      </div>
-    </div>
-  </div>
-  <div class="col-md-4"></div>
-</div>
 </body>
 
 </html>
-{% comment %} <script src="{% static 'js/register.js' %}"></script> {% endcomment %}
+

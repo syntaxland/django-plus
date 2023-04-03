@@ -1,3 +1,63 @@
+import random
+from django.shortcuts import render
+# from future import print_function
+# import time
+import sib_api_v3_sdk
+from sib_api_v3_sdk.rest import ApiException
+from pprint import pprint
+from django.conf import settings
+
+code = str(random.randint(100000, 999999))
+
+def send_email(request):
+    configuration = sib_api_v3_sdk.Configuration()
+    configuration.api_key['api-key'] = settings.SENDINBLUE_API_KEY
+    api_instance = sib_api_v3_sdk.TransactionalEmailsApi(sib_api_v3_sdk.ApiClient(configuration))
+    
+    subject = "OTP Email Verification"
+    receiver_name = 'Jon'
+    # html_content = f"<html><body><h1>OTP: {code}</h1></body></html>"
+    
+    html_content = f"<html><body>\
+            <h3>Hi {receiver_name}, <br\><br/><br/> \
+            Thank you for signing up with our service. \
+            To complete your registration, please use the OTP code provided below: <br/><br/>\
+            <h2>OTP: {code}</h2><br/><br/>\
+            This code is valid for 10 minutes. If you did not request this code, please disregard this email.<br/><br/>\
+            Best regards,<br/>\
+            Softglobal Team\
+            </>\
+            </body></html>"
+
+    sender = {"name":"Softglobal","email":"softglobal3@gmail.com"}
+    to = [{"email":"chibuzo.okenwa@gmail.com","name":receiver_name}]
+
+    # cc = [{"email":"example2@example2.com","name":"Janice Doe"}]
+    # bcc = [{"name":"John Doe","email":"example@example.com"}]
+    # reply_to = {"email":"replyto@domain.com","name":"John Doe"}
+
+
+    # params = {"parameter":"My param value","subject":"New Subject"}
+    send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(to=to,
+                                                   html_content=html_content,
+                                                    sender=sender, 
+                                                    subject=subject)
+
+    try:
+        api_response = api_instance.send_transac_email(send_smtp_email)
+        pprint(api_response)
+        return render(request, 'email_sent.html')
+    except ApiException as e:
+        print("Exception when calling SMTPApi->send_transac_email: %s\n" % e)
+
+
+
+
+
+
+
+
+
 # from django.shortcuts import render
 # # from future import print_function
 # # import time
@@ -12,16 +72,10 @@
 #     api_instance = sib_api_v3_sdk.TransactionalEmailsApi(sib_api_v3_sdk.ApiClient(configuration))
     
 #     subject = "Activation Email"
-#     html_content = "<html><body><h1>OTP: 494838</h1></body></html>"
+#     html_content = "<html><body><h1>OTP: 553483</h1></body></html>"
 #     sender = {"name":"Softglobal","email":"grammarpoint2@gmail.com"}
 #     to = [{"email":"chibuzo.okenwa@gmail.com","name":"GrammarPoint"}]
 
-#     # cc = [{"email":"example2@example2.com","name":"Janice Doe"}]
-#     # bcc = [{"name":"John Doe","email":"example@example.com"}]
-#     # reply_to = {"email":"replyto@domain.com","name":"John Doe"}
-
-
-#     # params = {"parameter":"My param value","subject":"New Subject"}
 #     send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(to=to,
 #                                                    html_content=html_content,
 #                                                     sender=sender, 
@@ -30,53 +84,15 @@
 #     try:
 #         api_response = api_instance.send_transac_email(send_smtp_email)
 #         pprint(api_response)
+
+#         pprint(subject)
+#         pprint(html_content)
+#         pprint(sender)
+#         pprint(to)
+        
 #         return render(request, 'email_sent.html')
 #     except ApiException as e:
 #         print("Exception when calling SMTPApi->send_transac_email: %s\n" % e)
-
-
-
-
-
-
-
-
-
-from django.shortcuts import render
-# from future import print_function
-# import time
-import sib_api_v3_sdk
-from sib_api_v3_sdk.rest import ApiException
-from pprint import pprint
-from django.conf import settings
-
-def send_email(request):
-    configuration = sib_api_v3_sdk.Configuration()
-    configuration.api_key['api-key'] = settings.SENDINBLUE_API_KEY
-    api_instance = sib_api_v3_sdk.TransactionalEmailsApi(sib_api_v3_sdk.ApiClient(configuration))
-    
-    subject = "Activation Email"
-    html_content = "<html><body><h1>OTP: 553483</h1></body></html>"
-    sender = {"name":"Softglobal","email":"grammarpoint2@gmail.com"}
-    to = [{"email":"chibuzo.okenwa@gmail.com","name":"GrammarPoint"}]
-
-    send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(to=to,
-                                                   html_content=html_content,
-                                                    sender=sender, 
-                                                    subject=subject)
-
-    try:
-        api_response = api_instance.send_transac_email(send_smtp_email)
-        pprint(api_response)
-
-        pprint(subject)
-        pprint(html_content)
-        pprint(sender)
-        pprint(to)
-        
-        return render(request, 'email_sent.html')
-    except ApiException as e:
-        print("Exception when calling SMTPApi->send_transac_email: %s\n" % e)
 
 
 
@@ -162,7 +178,7 @@ def send_email(request):
 #             # return render(request, 'email_sent.html')
 #         except ApiException as e:
 #             print("Exception when calling SMTPApi->send_transac_email: %s\n" % e)
-#     render(request, 'email.html')
+#     return render(request, 'email.html')
 
 
 
@@ -171,8 +187,6 @@ def send_email(request):
 # from django.shortcuts import render, redirect
 # from django.http import HttpResponseRedirect
 # from django.urls import reverse
-# # from future import print_function
-# # import time
 # import sib_api_v3_sdk
 # from sib_api_v3_sdk.rest import ApiException
 # from pprint import pprint
@@ -191,6 +205,13 @@ def send_email(request):
 #         to_name = request.POST.get('to_name')
 #         subject = request.POST.get('subject')
 #         message = request.POST.get('message')
+
+#         # sender_name = request.POST['sender_name']
+#         # sender_email = request.POST['sender_email']
+#         # to_email = request.POST['to_email']
+#         # to_name = request.POST['to_name']
+#         # subject = request.POST['subject']
+#         # message = request.POST['message']
 
 #         # API Config
 #         configuration = sib_api_v3_sdk.Configuration()

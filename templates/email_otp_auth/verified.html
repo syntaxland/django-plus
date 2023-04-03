@@ -1,0 +1,12 @@
+
+{% comment %} {{ welcome }} {% endcomment %}
+
+
+<h1>
+    Welcome {{ user.username | title }}! 
+    Your email {{ email }} is now verifed!!
+</h1>
+
+{{ context }}
+
+<button><a href="{% url 'delete_user' user_id=user.id %}">Delete Account</a></button>

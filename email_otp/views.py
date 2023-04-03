@@ -1,33 +1,183 @@
-from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
-# Create your views here.
-import random
-from django.core.mail import send_mail
+import sib_api_v3_sdk
+from sib_api_v3_sdk.rest import ApiException
+
+from pprint import pprint
 from django.conf import settings
-from rest_framework import generics, status
+
+from django.http import HttpResponse
+from django.shortcuts import redirect, render, get_object_or_404
+from django.contrib import messages
+from django.contrib.auth.models import User
+
+from django.utils.crypto import get_random_string
+from django.utils import timezone
+from datetime import datetime, timedelta
+
+import random
+from .models import EmailOTP
+
+from rest_framework import status
 from rest_framework.response import Response
-from .models import EmailVerification, User
-from .serializers import EmailVerificationSerializer
 
-class SendEmailVerificationView(generics.CreateAPIView):
-    serializer_class = EmailVerificationSerializer
 
-def post(self, request):
-    email = request.data.get('email')
-    if not email:
-        return Response({'error': 'The Email field must be set'}, status=status.HTTP_400_BAD_REQUEST)
+# def gen_otp():
+#     code = str(random.randint(100000, 999999))
+#     return code
+# code = gen_otp()
+
+code = str(random.randint(100000, 999999))
+
+def send_email_otp(request):
+
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        email = request.POST.get('email')     
+
+        # user = User.objects.get(email=email)
+        # user = request.user
+        
+        # subject = request.POST.get('subject')
+        # otp = request.POST.get('otp')
+        
+        # Email Sending API Config
+        configuration = sib_api_v3_sdk.Configuration()
+        configuration.api_key['api-key'] = settings.SENDINBLUE_API_KEY
+        api_instance = sib_api_v3_sdk.TransactionalEmailsApi(sib_api_v3_sdk.ApiClient(configuration))
+        # Sending email
+        subject = "OTP Email Verification"
+        html_content = f"""
+        <!DOCTYPE html>
+            <html>
+            <head>
+                <title>OTP Email Verification</title>
+            </head>
+            <body>
+                <p>Dear { username.title() },</p>
+                <p>Thank you for signing up with our service.
+                To complete your registration, please use the OTP code provided below:</p><br/>
+                <h2>OTP: { code }</h2><br/>
+                <p>This code is valid for 15 minutes.</p>
+                <p>If you didn't request this verification email, please ignore it.</p>
+                <p>Best regards,<br>Softglobal Team</p>
+            </body>
+            </html>
+            """
+        sender_name = settings.EMAIL_SENDER_NAME
+        sender_email = settings.EMAIL_HOST_USER
+        sender = {"name":sender_name,"email":sender_email}
+        to = [{"email":email,"name":username}]
+        send_smtp_email = sib_api_v3_sdk.SendSmtpEmail(to=to, 
+                                                        html_content=html_content,
+                                                        sender=sender,
+                                                        subject=subject) 
+        try:
+            api_response = api_instance.send_transac_email(send_smtp_email)
+            pprint(api_response)
+
+            messages.info(request, 'Email verification code sent to:', email)
+            print('Email verification code sent to:', email)
+
+            # Creating a user
+            user = User.objects.create(username=username)
+            # Save the user, email and OTP to the database
+            EmailOTP.objects.create(user=user, email=email, code=code)
+            # HttpResponse('Email verification code sent to your email:', email)
+
+        except ApiException as e:
+            print(e)
+            # return redirect('verify_email_otp')
+            # return Response({'success': 'SMS verification code sent'}, status=status.HTTP_200_OK)
+        except Exception as e:
+            print(e)
+        # verify_email_otp(request, email)
+        request.session['email'] = email
+        return redirect('verify_email_otp')
+
+
+    return render(request, 'email_otp_auth/send_email_otp.html')
+    # return render(request, 'sms_auth/verfiy_phone.html', {'error': 'Failed to send OTP'})
+
+
+def verify_email_otp(request):
+    if request.method == 'POST':
+        otp = request.POST.get('otp')
+        email = request.session.get('email')
+
+        email_otp = EmailOTP.objects.filter(
+            code=otp, 
+            email=email,
+            is_verified=False, 
+            created_at__gte=timezone.now() - timezone.timedelta(minutes=15)
+            ).first()
+
+        try:
+            if email_otp:
+                email_otp.is_verified = True
+                email_otp.save()
+                print("Email verification is succussful!")
+                return redirect('welcome')
+            else:
+                print("OTP is wrong or expired!")
+        except Exception as e:
+            print(e)
+            return redirect('verify_email_otp')
+
+    return render(request, 'email_otp_auth/verify_email_otp.html')
+
+
+def is_otp_expired(request):
+    pass
+
+    return redirect('resend_otp')
+
+
+def resend_otp(request):
+    pass
+    # if request.method == 'POST':
+    #     email = request.POST['email']
+    #     try:
+    #         email_otp = EmailOTP.objects.get(email=email)
+    #     except EmailOTP.DoesNotExist:
+    #         error = 'Invalid email address'
+    #         return render(request, 'resend_otp.html', {'error': error})
+    #     else:
+    #         if email_otp.is_expired():
+    #             email_otp.code = get_random_string(length=6)
+    #             send_mail(
+    #                 'Verify your email address',
+    #                 f'Your verification code is: {email_otp.code}',
+    #                 settings.DEFAULT_FROM_EMAIL,
+    #                 [email],
+    #                 fail_silently=False,
+    #             )
+    #             email_otp.last_sent_at = timezone.now()
+    #             email_otp.save()
+    #             return redirect('enter_otp')
+    #         else:
+    #             error = f'An OTP has already been sent to {email}. \
+    #                 Please check your email or wait until it expires.'
+    #             return render(request, 'resend_otp.html', {'error': error})
+    return render(request, 'email_otp_auth/resend_email_otp.html')
     
-    user = User.objects.filter(email=email).first()
-    if not user:
-        return Response({'error': 'User with this email does not exist'}, status=status.HTTP_404_NOT_FOUND)
-    
-    code = str(random.randint(100000, 999999))
-    email_verification = EmailVerification.objects.create(user=user, code=code)
-    send_mail(
-        'Verify Your Email',
-        f'Your OTP verification code is: {code}',
-        settings.EMAIL_HOST_USER,
-        [email],
-        fail_silently=False,
-    )
-    return Response({'success': 'Email verification code sent'}, status=status.HTTP_200_OK)
+
+
+def welcome(request, user_id):
+    context = {'user_id': user_id}
+    # if context:
+    #     return redirect('send_email_otp')
+    return render(request, 'email_otp_auth/verified.html', context)
+
+
+def delete_user(request, user_id):
+    # user = User.objects.get(id=user_id)
+    user = get_object_or_404(User, id=user_id)
+    EmailOTP.objects.filter(user=user).delete()
+
+    if user:
+        user.delete()
+        return redirect('send_email_otp')
+    context = {'user_id': user_id}
+    return render(request, 'email_otp_auth/delete_user.html', context)

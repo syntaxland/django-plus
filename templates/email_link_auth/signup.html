@@ -1,0 +1,53 @@
+{% load static %}
+{% comment %} {% if error %}
+    <p>{{ error }}</p>
+{% endif %} {% endcomment %}
+
+
+
+{% comment %} {% if messages.warning %}
+    <ul class="warning-messages">
+        {% for message in messages.warning %}
+            <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+{% if messages.error %}
+    <ul class="error-messages">
+        {% for message in messages.error %}
+            <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %} 
+
+{% if messages.success %}
+    <ul class="success-messages">
+        {% for message in messages.success %}
+            <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %} {% endcomment %}
+
+<style>
+    h3 {
+      color: red;
+    }
+</style>
+  
+{% for message in messages %}
+<h3>{{message}}</h3>
+{% endfor %}
+
+<h2>Sign Up</h2>
+
+<form method="post" action="{% url 'signup' %}">    
+    {% csrf_token %}
+
+    <label for="text">Username:</label>
+    <input type="text" name="username" id="username" placeholder="Enter your name" required><br><br>
+    <label for="email">Email:</label>
+    <input type="email" name="email" id="email" placeholder="Enter your email" required><br><br>
+    <input type="submit" value="Sign up">
+</form>
+

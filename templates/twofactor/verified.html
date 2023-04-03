@@ -1,0 +1,12 @@
+
+{% comment %} {{ welcome }} {% endcomment %}
+
+<h1>
+    Welcome {{ user.username | title}}! 
+    Your {{ user.phone}} now verifed!!
+</h1>
+
+{% comment %} <form method="post" action="{% url 'welcome' %}" enctype="multipart/form-data">    
+    {% csrf_token %}
+
+</form> {% endcomment %}

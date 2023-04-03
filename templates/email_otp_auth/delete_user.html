@@ -1,0 +1,12 @@
+<style>
+    .color-red {
+        color="red"
+    }
+    </style>
+
+<form method="post" action="{% url 'delete_user' %}" enctype="multipart/form-data">    
+    {% csrf_token %}
+    {{ context }}
+    <button type="submit" class="color-red" class="btn btn-danger">Delete Account<button/>
+
+</form>

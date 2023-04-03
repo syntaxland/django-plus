@@ -58,25 +58,36 @@ INSTALLED_APPS = [
     # ... include the providers you want to enable:
     'allauth.socialaccount.providers.google',
     # 'allauth.socialaccount.providers.facebook',
-    # 'allauth.socialaccount.providers.github', 
-  
+    # 'allauth.socialaccount.providers.github',
+
+    'captcha',
+    
     'rest_framework',
 
     # started apps
     'captcha_app.apps.CaptchaAppConfig',
-    'email_auth_app.apps.EmailAuthAppConfig',
-    'email_otp.apps.EmailOtpConfig',   
+    'drf',
     'email_auth.apps.EmailAuthConfig',
+    'email_auth_app.apps.EmailAuthAppConfig',
+    'email_link_auth.apps.EmailLinkAuthConfig',
+    'email_otp.apps.EmailOtpConfig',   
     'otp_auth.apps.OtpAuthConfig',
-    'sms_otp.apps.SmsOtpConfig',   
     'post.apps.PostConfig',
     'send_mail.apps.SendMailConfig',
+    'sms_otp.apps.SmsOtpConfig',
+    'two_factor',
 
-    # for MongoDB conn
+    # for MongoDB conn 
     'djongo',
+    
+    'phonenumber_field',
 
-    'captcha',
+    'crispy_forms',
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+# LOGIN_URL ='/login/'
+# AUTH_USER_MODEL = 'users.CustomUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -272,7 +283,10 @@ EMAIL_PORT = os.getenv('EMAIL_PORT')
 EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-
+EMAIL_SENDER_NAME = os.getenv('EMAIL_SENDER_NAME')
 
 SENDINBLUE_API_KEY = os.getenv('SENDINBLUE_API_KEY')
+
+
+
 

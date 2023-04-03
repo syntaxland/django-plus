@@ -1,0 +1,15 @@
+
+{% comment %} {% if error %}
+    <p>{{ error }}</p>
+{% endif %} {% endcomment %}
+
+<h2>Verify Your Email</h2>
+
+<form method="post" action="{% url 'send_email_otp' %}">    
+    {% csrf_token %}
+    <label for="phone">Username:</label>
+    <input type="phone" name="username" id="username" placeholder="Enter your name" required><br><br>
+    <label for="phone">Email:</label>
+    <input type="phone" name="email" id="email" placeholder="Enter your email" required><br><br>
+    <input type="submit" value="Send OTP">
+</form>

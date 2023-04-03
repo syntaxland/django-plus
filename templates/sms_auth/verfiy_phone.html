@@ -1,0 +1,14 @@
+
+{% comment %} {% if error %}
+    <p>{{ error }}</p>
+{% endif %} {% endcomment %}
+
+<h2>Verify Your Phone Number</h2>
+
+<form method="post" action="{% url 'send_sms_otp' %}" enctype="multipart/form-data">    
+    {% csrf_token %}
+    <label for="phone">Phone Number:</label>
+    <input type="phone" name="phone" id="phone" placeholder="Enter your phone number" required><br><br>
+
+    <input type="submit" value="Send OTP">
+</form>

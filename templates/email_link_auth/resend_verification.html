@@ -1,0 +1,16 @@
+<style>
+    h3 {
+      color: red;
+    }
+</style>
+  
+{% for message in messages %}
+<h3>{{message}}</h3>
+{% endfor %}
+
+<form method="POST" action="{% url 'resend_verification' %}">
+    {% csrf_token %}
+    <label for="email">Email:</label>
+    <input type="email" name="email" id="email" placeholder="Enter your email" required><br><br>
+    <button type="submit">Resend verification email</button>
+</form>

@@ -1,0 +1,25 @@
+
+<style>
+    h3 {
+      color: red;
+    }
+</style>
+  
+{% for message in messages %}
+<h3>{{message}}</h3>
+{% endfor %}
+
+{% comment %} {{ welcome }} {% endcomment %}
+
+
+<h1>
+    Welcome {{ user.username | title }}! 
+    Your email {{ email }} is now verifed!!
+</h1>
+
+{% comment %} {{ context }} {% endcomment %}
+
+{% comment %} <button><a href="{% url 'delete_user' user_id=user.id %}">Delete Account</a></button> {% endcomment %}
+
+
+

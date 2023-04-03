@@ -7,8 +7,8 @@ from django.conf import settings
 
 class UserPost(models.Model):
     name = models.CharField(max_length=255)
-    image = models.ImageField(upload_to='images/', blank=True, null=True)
-    video = models.FileField(upload_to='videos/', blank=True, null=True)
+    image = models.ImageField(upload_to='static/images/', blank=True, null=True)
+    video = models.FileField(upload_to='media/videos/', blank=True, null=True)
     description = models.TextField()
     
     def __str__(self):
@@ -18,11 +18,12 @@ class UserPost(models.Model):
 
 class Score(models.Model):
     result = models.PositiveIntegerField()
-       
+
     def __str__(self):
         return str(self.result)
     
     def save(self, *args, **kwargs):
+
         account_sid = settings.TWILIO_ACCOUNT_SID 
         auth_token = settings.TWILIO_AUTH_TOKEN 
         client = Client(account_sid, auth_token)

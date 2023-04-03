@@ -1,0 +1,22 @@
+<style>
+    .color-red {
+        color="red"
+    }
+</style>
+
+<style>
+    h3 {
+      color: red;
+    }
+</style>
+  
+{% for message in messages %}
+<h3>{{message}}</h3>
+{% endfor %}
+
+<form method="post" action="{% url 'delete_user' %}" enctype="multipart/form-data">    
+    {% csrf_token %}
+    {{ context }}
+    <button type="submit" class="color-red" class="btn btn-danger">Delete Account<button/>
+
+</form>
