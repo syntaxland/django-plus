@@ -21,6 +21,7 @@ from django.conf import settings
 
 urlpatterns = [ 
     path('admin/', admin.site.urls),
+
     # Started apps
     path('api/', include('post.url')),
     path('', include('captcha_app.urls')),
@@ -30,6 +31,8 @@ urlpatterns = [
     path('verify-otp/', include('sms_otp.urls')),
     path('verify-email-otp/', include('email_otp.urls')),
     path('verify-email/', include('email_link_auth.urls')),
+    path('visualize/', include('visualization.urls')),
+
     # Others 
     path('', TemplateView.as_view(template_name="account/login.html")), 
     path('accounts/', include('allauth.urls')), 

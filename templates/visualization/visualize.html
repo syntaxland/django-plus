@@ -1,0 +1,17 @@
+{% comment %} {% extends "base.html" %}
+
+{% block title %}Matplotlib in Django{% endblock %}
+
+{% block content %}
+    <h1>Matplotlib in Django</h1>
+    <p>This is some example content for Matplotlib in Django.</p>
+{% endblock %} {% endcomment %}
+
+<h1>Matplotlib in Django</h1>
+{% comment %} <p>This is some example content for Matplotlib in Django.</p> {% endcomment %}
+
+{% comment %} {% if chart %}
+    <img src="data:image/png;base64, {{graph | safe}}" alt="Sales Chart">
+{% endif chart %} {% endcomment %}
+
+<img src="data:image/png;base64, {{graph | safe}}" alt="Sales Chart">

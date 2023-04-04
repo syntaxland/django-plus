@@ -76,6 +76,11 @@ INSTALLED_APPS = [
     'send_mail.apps.SendMailConfig',
     'sms_otp.apps.SmsOtpConfig',
     'two_factor',
+    
+    'weather_api',
+    'news_api',
+    'visualization.apps.VisualizationConfig',
+
 
     # for MongoDB conn 
     'djongo',
@@ -287,6 +292,5 @@ EMAIL_SENDER_NAME = os.getenv('EMAIL_SENDER_NAME')
 
 SENDINBLUE_API_KEY = os.getenv('SENDINBLUE_API_KEY')
 
-
-
-
+IPAPI_KEY = os.getenv('IPAPI_KEY')
+OPENWEATHERMAP_KEY = os.getenv('OPENWEATHERMAP_KEY')
