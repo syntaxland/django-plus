@@ -33,7 +33,17 @@ def get_plot(x, y):
     plt.switch_backend('AGG')
     fig, ax = plt.subplots(figsize=(7,5))
     ax.set_title('Sales')
-    sns.barplot(x=x, y=y, color='blue', ax=ax)
+
+    # sns.barplot(x=x, y=y, color='blue', ax=ax)
+    # sns.scatterplot(x=x, y=y, ax=ax)
+    sns.lineplot(x=x, y=y, ax=ax)
+    # sns.countplot(x=x, y=y, color='blue', ax=ax)
+    # sns.boxplot(x=x, y=y, color='blue', ax=ax)
+    # sns.violinplot(x=x, y=y, color='blue', ax=ax)
+    # sns.swarmplot(x=x, y=y, color='blue', ax=ax)
+    # sns.heatmap(x=x, y=y, color='blue', ax=ax)
+    # sns.pairplot(x=x, y=y, color='blue', ax=ax)
+
     ax.set_xticklabels(labels=x, rotation=45, ha='right')
     ax.set_xlabel('Item')
     ax.set_ylabel('Price')
@@ -47,3 +57,6 @@ def get_plot(x, y):
     buffer.close()
 
     return graph
+
+
+

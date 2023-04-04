@@ -77,6 +77,7 @@ INSTALLED_APPS = [
     'sms_otp.apps.SmsOtpConfig',
     'two_factor',
     
+    'gpt',
     'weather_api',
     'news_api',
     'visualization.apps.VisualizationConfig',
