@@ -16,7 +16,7 @@ from django.utils.crypto import get_random_string
 from django.utils import timezone
 from datetime import datetime, timedelta
 
-import random
+import random, time
 from .models import EmailOTP
 
 from rest_framework import status
@@ -163,21 +163,33 @@ def resend_otp(request):
     return render(request, 'email_otp_auth/resend_email_otp.html')
     
 
-
 def welcome(request, user_id):
-    context = {'user_id': user_id}
+    user = User.objects.get(id=user_id)
+    # users = User.objects.all()
+    # user_records = EmailOTP.objects.all()
+
+    context = {
+        'user': user
+        # 'users':users
+    }
+
     # if context:
     #     return redirect('send_email_otp')
     return render(request, 'email_otp_auth/verified.html', context)
 
 
 def delete_user(request, user_id):
-    # user = User.objects.get(id=user_id)
-    user = get_object_or_404(User, id=user_id)
-    EmailOTP.objects.filter(user=user).delete()
-
-    if user:
-        user.delete()
-        return redirect('send_email_otp')
-    context = {'user_id': user_id}
-    return render(request, 'email_otp_auth/delete_user.html', context)
+    user = User.objects.get(id=user_id)
+    # users = User.objects.all()
+    # user = User.objects.filter(user_id=user_id).first()
+    # user = User.objects.filter(user_id=user_id).last()
+    # user = get_object_or_404(User, id=user_id)
+    # user_records = EmailOTP.objects.all()
+    # delete_user_records = EmailOTP.objects.filter(user=user)
+    # if user:
+    user.delete()
+    # delete_user_records.delete()
+    messages.info(request, 'User successfully deleted.')
+    time.sleep(10)
+    return redirect('send_email_otp')
+    # return render(request, 'email_otp_auth/verified.html')

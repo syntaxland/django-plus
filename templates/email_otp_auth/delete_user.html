@@ -1,12 +1,17 @@
-<style>
-    .color-red {
-        color="red"
-    }
-    </style>
+<h2>Delete Account</h3>
 
-<form method="post" action="{% url 'delete_user' %}" enctype="multipart/form-data">    
+{% comment %} {{ user_records }} {% endcomment %}
+
+{% for user in users %}<hr />
+<li> {{ user.username | title }} </li><hr />
+{% comment %} <li> {{ user.email | title }} </li><hr />
+<li> {{ user.code | title }} </li><hr /> {% endcomment %}
+
+{% endfor %}<br />
+
+<form method="post" action="{% url 'delete_user' user.id %}">    
     {% csrf_token %}
-    {{ context }}
-    <button type="submit" class="color-red" class="btn btn-danger">Delete Account<button/>
 
+    <button  type="submit">Delete {{ user | title }}<button/>
 </form>
+

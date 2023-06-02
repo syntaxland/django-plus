@@ -19,7 +19,8 @@ urlpatterns = [
     path('resend-email-otp/', views.resend_otp, name='resend_email_otp'),
     
     path('welcome/', views.welcome, name='welcome'),
-    path('welcome/<int:user_id>/', views.welcome, name='welcome'), 
+    path('welcome/<int:user_id>/', views.welcome, name='welcome'),
+
     path('delete-user/', views.delete_user, name='delete_user'), 
     path('delete-user/<int:user_id>/', views.delete_user, name='delete_user'),
 ]

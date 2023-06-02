@@ -11,6 +11,9 @@ class EmailVerification(models.Model):
     verified = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=now)
 
+    # def __init__(self):
+    #     return self.email, self.token
+
     def __str__(self):
         return f"{self.email} | {self.token}"
 

@@ -1,12 +1,17 @@
 
-{% comment %} {{ welcome }} {% endcomment %}
-
 
 <h1>
     Welcome {{ user.username | title }}! 
-    Your email {{ email }} is now verifed!!
+   Your email {{ user.email }} is now verifed!! 
 </h1>
 
-{{ context }}
+{% for user in users %}<hr />
+<li> {{ user.username | title }} <a href="{% url 'delete_user' user.id %}" type="submit">Delete {{ user.username | title }}<a/></li><hr />
+{% endfor %}<br />
 
-<button><a href="{% url 'delete_user' user_id=user.id %}">Delete Account</a></button>
+
+<form method="post" action="{% url 'welcome' user.id %}">    
+    {% csrf_token %}
+    <button href="{% url 'delete_user' user.id %}" type="submit">Delete {{ user | title }}<button/><br/><br/>
+    <a href="{% url 'welcome' user.id %}" type="submit">Cancel<a/><br/><br/>
+</form>
