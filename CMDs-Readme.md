@@ -1,7 +1,8 @@
-===================================================================================================
 # CMDs | Quickstart
 ===================================================================================================
-## Quick Python | Django Setup CMDs 
+## Backend | Python | Node | .Net | Java
+===================================================================================================
+### Quick Python | Django Setup CMDs 
 python -m venv venv <!-- or python -m venv env -->
 venv\Scripts\activate.bat <!-- env\Scripts\activate.bat -->
 venv\Scripts\deactivate <!-- To deactivate for Windows -->
@@ -34,9 +35,9 @@ coverage run --omit='*/venv/*' manage.py test
 coverage html
 
 ===================================================================================================
-## React JS CMDs
+## Frontend | React | React Native | Vue | Angular | Flutter
 ===================================================================================================
-
+### React JS Setup CMDs
 npm install -g create-react-app <!-- To install reacjs globally -->
 npm list react
 <!-- npm update react react-dom -->
@@ -57,11 +58,47 @@ npm install -g react-devtools
 npm install react-phone-number-input <!-- phone number input form with country code -->
 
 npm install axios react-router-dom@5.3.4 bootstrap redux react-redux react-bootstrap react-phone-number-input material-ui
+---------------------------------------------------------------------------------------------------
+## React Native CMDs
+
+---------------------------------------------------------------------------------------------------
+## Vue JS CMDs
+
+---------------------------------------------------------------------------------------------------
+## Angular CMDs
+
+---------------------------------------------------------------------------------------------------
 
 ===================================================================================================
-# DevOps
+## DevOps | Git & GitHub | Docker | Kubernetes | CI/CD
 ===================================================================================================
+### GIT & GITHUB
+<!-- ### Create local repo and commit -->
+git status
+git init -b main
+git add . <!--to add all files or `git add CMDs-Readme.md` -->
+git commit -m "First commit"
+<!-- git commit -m "updated CMDs-Readme.md"
+git commit -m "added  requirements.txt" -->
 
+<!-- Create Remote Repo -->
+<!-- ### Push to remote repo -->
+git remote add <remote-url>
+git branch -M -main
+git push -u origin main
+
+<!-- ### Update to remote repo -->
+git remote -v
+git push origin main
+
+<!-- ### To reinitialize -->
+ls -a
+rm -rf .git
+
+<!-- ### Git Branching and Checkout -->
+git branch <!--To see local -->
+git branch -r <!--To see remote... git checkout <remote-branch-name> -->
+git branch -a <!--To see both -->
 ## Docker && Docker Compose CMDs 
 docker -v
 docker version
@@ -112,7 +149,7 @@ docker-compose up -d
 docker volume ls
 docker volume rm
 ---------------------------------------------------------------------------------------------------
-## Docker Exec 'vi' CMDs:
+### Docker Exec 'vi' CMDs:
 1. i: Enter insert mode to start inserting text at the cursor position.
 2. Esc: Exit insert mode and return to command mode.
 3. :w: Save the changes made in the file.
@@ -143,9 +180,8 @@ docker volume rm
 28. Ctrl + u: Scroll half-page up.
 29. Ctrl + d: Scroll half-page down.
 30. Ctrl + o: Jump to the previous location.
-
 ---------------------------------------------------------------------------------------------------
-## Kubernetes CMDs:
+### Kubernetes CMDs:
 <!-- Some verison check CMDs-->
 kubectl version 
 kubectl version --output=json
@@ -213,8 +249,25 @@ Type services.msc
 
 15. kubectl label: Adds or updates labels of a resource.
     Example: kubectl label pod/my-pod environment=production
-
 ---------------------------------------------------------------------------------------------------
+### CI/CD | GitHub Actions | AWS CodePipeline | GitLab
+---------------------------------------------------------------------------------------------------
+#### GitHub Actions
+---------------------------------------------------------------------------------------------------
+#### CodePipeline
+---------------------------------------------------------------------------------------------------
+#### Jenkins
+---------------------------------------------------------------------------------------------------
+#### Circle CI
+---------------------------------------------------------------------------------------------------
+#### GitLab
+---------------------------------------------------------------------------------------------------
+#### Travis CI
+---------------------------------------------------------------------------------------------------
+
+===================================================================================================
+## Cloud | AWS | GCP | Azure
+===================================================================================================
 ## AWS CLI | ECR CMDs:
 <!-- Pushing Docker Image from Docker Hub to AWS ECR -->
 Create Groups | e.g. admin-group
@@ -374,9 +427,9 @@ Private-MAC: 37b5e0e4886ce86b514453fa49889401d1b92c2e
 29. Alt + H: Show/hide line numbers.
 30. Alt + Space: Set/unset the mark.
 ===================================================================================================
-Databases
+## Databases
 ===================================================================================================
-## postgres CMDs
+### postgres CMDs
 <!-- CONNECTIONS -->
 psql -h localhost -p 5432 -U jb -d gpt  <!-- -- To connect in cmd: -->
 psql -U jb -d tiktok
@@ -487,7 +540,6 @@ SELECT * FROM users ORDER BY id DESC LIMIT 1;
 <!-- -- Delete the last inserted row -->
 DELETE FROM users WHERE id = (SELECT id FROM users ORDER BY id DESC LIMIT 1) RETURNING *;
 
-
 <!-- BACKUP -->
 --psql -h localhost -p 5432 -U analysis -d postgres
 pg_dump -U username -h hostname databasename > backup.sql
@@ -496,7 +548,7 @@ pg_dump -U jb -h localhost gpt > backup_users.sql
 pg_restore --dbname=mydatabase mydb.backup
 pg_restore jb=gpt mydb.backup
 ---------------------------------------------------------------------------------------------------
-## mysql CMDs
+### mysql CMDs
 <!-- CONNECTION -->
 mysql -u username -p <!-- -- To run mysql in cmd -->
 <!-- DATABASE -->
@@ -522,7 +574,7 @@ mysqldump -u jb -p tiktok > tiktok_backup.sql
 TRUNCATE TABLE table_name; <!-- -- Empty the tables: Use the TRUNCATE TABLE SQL command to delete -- all the data from the tables in the database. -->
 DROP DATABASE tiktok; <!-- -- Drop the database: Finally, use the DROP DATABASE SQL command to delete the entire database. -->
 ---------------------------------------------------------------------------------------------------
-## mongo CMDs
+### mongo CMDs
 <!-- REMOTE CONNECTION -->
 <!-- -- Start the Mongo Shell -->
 mongosh "YOUR_CONNECTION_STRING" --username YOUR_USER_NAME
@@ -642,35 +694,15 @@ db.updateUser(
     }
 )
 ===================================================================================================
-## GIT & GITHUB
+## ML
 ===================================================================================================
-<!-- ### Create local repo and commit -->
-git status
-git init 
-git init -b main
-git add . <!--to add all files or `git add CMDs-Readme.md` -->
-git commit -m "First commit"
-<!-- git commit -m "updated Readme.md"
-git commit -m "added  requirements.txt" -->
+### TensoFlow
 
-<!-- Create Remote Repo -->
-<!-- ### Push to remote repo -->
-git remote add <remote-url>
-git branch -M -main
-git push -u origin main
+---------------------------------------------------------------------------------------------------
 
-<!-- ### Update to remote repo -->
-git remote -v
-git push origin main
+### Sklearn
 
-<!-- ### To reinitialize -->
-ls -a
-rm -rf .git
-
-<!-- ### Git Branching and Checkout -->
-git branch <!--To see local -->
-git branch -r <!--To see remote... git checkout <remote-branch-name> -->
-git branch -a <!--To see both -->
+---------------------------------------------------------------------------------------------------
 
 ===================================================================================================
 ## Others
@@ -678,9 +710,7 @@ git branch -a <!--To see both -->
 <!-- ## Some Useful CMDs -->
 rm -rf <target-name> <!--To remove a dir  -->
 mv <old-name> <new-name> <!--To rename a dir -->
-===================================================================================================
 <!-- ### Creating venv using built-in python -m venv: -->
-
 ##### For Windows 
 <!--To create venv -->
 python -m venv venv  <!-- or python -m venv env -->
