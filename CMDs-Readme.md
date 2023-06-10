@@ -2,7 +2,8 @@
 ===================================================================================================
 ## Backend | Python | Node | .Net | Java
 ===================================================================================================
-### Quick Python | Django Setup CMDs 
+### Python | Django | FastAPI | Flask
+#### Django 
 python -m venv venv <!-- or python -m venv env -->
 venv\Scripts\activate.bat <!-- env\Scripts\activate.bat -->
 venv\Scripts\deactivate <!-- To deactivate for Windows -->
@@ -33,7 +34,6 @@ pip install psycopg2-binary mysqlclient djongo
 pip install coverage
 coverage run --omit='*/venv/*' manage.py test
 coverage html
-
 ===================================================================================================
 ## Frontend | React | React Native | Vue | Angular | Flutter
 ===================================================================================================
@@ -250,7 +250,7 @@ Type services.msc
 15. kubectl label: Adds or updates labels of a resource.
     Example: kubectl label pod/my-pod environment=production
 ---------------------------------------------------------------------------------------------------
-### CI/CD | GitHub Actions | AWS CodePipeline | GitLab
+### CI/CD | GitHub Actions | AWS CodePipeline | Jenkins
 ---------------------------------------------------------------------------------------------------
 #### GitHub Actions
 ---------------------------------------------------------------------------------------------------
@@ -343,10 +343,14 @@ pip install awscli
 <!-- Create access key -->
 <!-- Then run: -->
 aws configure
-AWS Access Key ID [****************POHU]: AKIAVUDETP7MQFFEKFNU
-AWS Secret Access Key [****************QbQT]: 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
-Default region name [None]: region=us-east-1
-Default output format [None]: output=json
+AWS Access Key ID [****************POHU]: 
+<!-- e.g.AKIAVUDETP7MQFFEKFNU -->
+AWS Secret Access Key [****************QbQT]: 
+<!-- e.g.MIyupSJA5UdFvRJIKhhUQ6HzMFCN25Wd4IBzPMo6 -->
+Default region name [None]: 
+<!-- e.g. region=us-east-1 -->
+Default output format [None]: 
+<!-- e.g. output=json or output=yaml-->
 <!-- Retrieve an authentication token and authenticate your Docker client to your registry.
 Use the AWS CLI to login in the terminal: -->
 aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/h9x1m6c8
@@ -371,7 +375,7 @@ PuTTY-User-Key-File-2: ssh-rsa
 Encryption: none
 Comment: admin-key-pair
 Public-Lines: 6
-AAAAB3NzaC1yc2EAAAADAQABAAABAQC5bJSEMsG2rmBCGlqf4qhjVZ7nr5BPAiLC
+<!-- AAAAB3NzaC1yc2EAAAADAQABAAABAQC5bJSEMsG2rmBCGlqf4qhjVZ7nr5BPAiLC
 bTGNrTqHmgwHU/oY6thayvVaGq0WfMrDIYuqGhdcrGRX+WbqoJppYwNFoI5nD/VL
 DzIzwMfm/KI74TL/T37OCAQoaolwwh+yeiTLD5Bjm4bw+bdHgo2fnu+6SpQS0J7T
 JyqLNMt6vqdNz20IQOmNS+ur3ghc+j4Z1DW4zAvtDXvlZ/XdeAmtdulUGq20DbQv
@@ -392,7 +396,7 @@ LOnPueF08epze+jlPbK9JVsTGCqxeRd41s9IcbZfw781cgDuDRWxx5SCpLHksQAA
 AIBTWCLV/+rC5PaNb3Ck4wQwTT3WGxze1htiXNw6H07LcaBkWL3lGLvWVf9bI5AX
 14NWqmtUzdug+nFgX8F5pEKApiuZE9GHZbPVhjXc7oe8icm6DWEXqBl03w91k80g
 rgD4wWM6Y75qPpyMtMe178T/GA5oud+J2X+hX7muvU1f7g==
-Private-MAC: 37b5e0e4886ce86b514453fa49889401d1b92c2e
+Private-MAC: 37b5e0e4886ce86b514453fa49889401d1b92c2e -->
 
 ---------------------------------------------------------------------------------------------------
 ## Nano CMDs 
@@ -427,7 +431,7 @@ Private-MAC: 37b5e0e4886ce86b514453fa49889401d1b92c2e
 29. Alt + H: Show/hide line numbers.
 30. Alt + Space: Set/unset the mark.
 ===================================================================================================
-## Databases
+## Databases | postgres | mysql | mongo|
 ===================================================================================================
 ### postgres CMDs
 <!-- CONNECTIONS -->
