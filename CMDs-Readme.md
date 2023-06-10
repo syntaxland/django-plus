@@ -62,7 +62,7 @@ npm install axios react-router-dom@5.3.4 bootstrap redux react-redux react-boots
 # DevOps
 ===================================================================================================
 
-## Docker && Docker Cpmpose CMDs 
+## Docker && Docker Compose CMDs 
 docker -v
 docker version
 docker ps -a
@@ -70,12 +70,14 @@ docker ps -a
 docker pull <image-name>
 docker images
 docker rmi <image-name-or-id>
-docker build -t django-api .
-docker run -p 8000:8000 django-api
+docker build -t <image-name-or-id> . <!-- To build image. Add `.` to build at cwd -->
+docker run -p 8000:8000 <image-name-or-id> <!-- To run built image -->
 <!-- Psshing Images to Docker Hub: -->
 docker login
-docker tag django-api jondebosco/django-api
-docker push jondebosco/django-api
+docker tag <image-name-or-id> <username>/<repository>:<tag>
+docker push <username>/<repository>:<tag> 
+docker tag djangoapi jondebosco/dockerized-djangoapi:v1.0
+docker push jondebosco/dockerized-djangoapi:v1.0
 <!-- Build and run Docker Image: -->
 docker exec -it djangoapi_container /bin/bash
 docker exec -it 8a2449609dee7b579 /bin/sh
@@ -146,14 +148,14 @@ docker volume rm
 ## Kubernetes CMDs:
 <!-- Some verison check CMDs-->
 kubectl version 
-kubectl version --short --output=json
-kubectl version --short --output=yaml
+kubectl version --output=json
+kubectl version --output=yaml
 kubectl config get-contexts
 <!-- Minikube Insallation CMDs-->
 choco install kubernetes-cli
 choco install minikube
 minikube version
-minikube start
+<!-- minikube start -->
 minikube status
 minikube dashboard
 <!-- Debugging Minikube - Docker conflict-->
@@ -215,7 +217,11 @@ Type services.msc
 ---------------------------------------------------------------------------------------------------
 ## AWS CLI | ECR CMDs:
 <!-- Pushing Docker Image from Docker Hub to AWS ECR -->
-<!-- Installing awscli -->
+Create Groups | e.g. admin-group
+Create Users  | e.g. admin
+Create Roles  | e.g. admin-role
+Create Policies | Add desired policy names/inline policies
+<!-- Install awscli -->
 pip install awscli
 <!-- Aftter crating ecr repo click on `Push commands` for docker => ecr django-api -->
 <!-- Create an IAM user and get ecr-djangoapi_credentials.csv -->
@@ -223,23 +229,8 @@ pip install awscli
 1. AmazonEC2FullAccess
 2. AmazonS3FullAccess
 3. AmazonRDSFullAccess
-4. AWSLambdaFullAccess
-5. AWSElasticBeanstalkFullAccess
-6. AmazonVPCFullAccess
-7. AWSCloudFormationFullAccess
-8. AWSCloudTrailFullAccess
-9. AWSIAMFullAccess
-10. AWSAutoScalingFullAccess
-11. AWSCloudWatchFullAccess
-12. AWSSNSFullAccess
-13. AmazonRoute53FullAccess
-14. AWSS3FullAccess
-15. AWSSESFullAccess
-16. AmazonEC2ContainerRegistryFullAccess
-17. AWSElasticLoadBalancingFullAccess
-18. AWSGlacierFullAccess
-19. AWSCloudFrontFullAccess
-20. AWSStorageGatewayFullAccess
+4. AdministratorAccess-AWSElasticBeanstalk
+5. AmazonEC2ContainerRegistryFullAccess
 <!-- Some Inline Policies -->
 {
   "Version": "2012-10-17",
@@ -268,71 +259,7 @@ pip install awscli
     {
       "Effect": "Allow",
       "Action": [
-        "lambda:*"
-      ],
-      "Resource": "*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "logs:*",
-        "cloudwatch:*"
-      ],
-      "Resource": "*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
         "iam:*"
-      ],
-      "Resource": "*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "route53:*"
-      ],
-      "Resource": "*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "cloudformation:*"
-      ],
-      "Resource": "*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "cloudtrail:*"
-      ],
-      "Resource": "*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "budgets:*"
-      ],
-      "Resource": "*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "aws-portal:*"
-      ],
-      "Resource": "*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ses:*"
-      ],
-      "Resource": "*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "sns:*"
       ],
       "Resource": "*"
     },
@@ -356,41 +283,6 @@ pip install awscli
         "ecs:*"
       ],
       "Resource": "*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "elasticloadbalancing:*"
-      ],
-      "Resource": "*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "autoscaling:*"
-      ],
-      "Resource": "*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "cloudfront:*"
-      ],
-      "Resource": "*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "glacier:*"
-      ],
-      "Resource": "*"
-    },
-    {
-      "Effect": "Allow",
-      "Action": [
-        "storagegateway:*"
-      ],
-      "Resource": "*"
     }
   ]
 }
@@ -398,23 +290,57 @@ pip install awscli
 <!-- Create access key -->
 <!-- Then run: -->
 aws configure
-AWS Access Key ID [****************POHU]: AKIAVUDETP7MSPFQFZL2
-AWS Secret Access Key [****************QbQT]: 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
+AWS Access Key ID [****************POHU]: AKIAVUDETP7MQFFEKFNU
+AWS Secret Access Key [****************QbQT]: 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
 Default region name [None]: region=us-east-1
 Default output format [None]: output=json
 <!-- Retrieve an authentication token and authenticate your Docker client to your registry.
-Use the AWS CLI: -->
+Use the AWS CLI to login in the terminal: -->
 aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/h9x1m6c8
 <!-- Note: If you receive an error using the AWS CLI, make sure that you have the latest version of the AWS CLI and Docker installed. -->
-<!-- Pulling the image to localenv from hub? -->
+<!-- Pull the image to local env from hub? -->
 docker pull jondebosco/django-api
-<!-- Or build your Docker image using the following command. For information on building a Docker file from scratch see the instructions here . You can skip this step if your image is already built: -->
+<!-- Or build your the Docker image using the following command. For information on building a Docker file from scratch see the instructions here . You can skip this step if your image is already built: -->
 docker build -t ecr-django-api .
 <!-- After the build completes, tag your image so you can push the image to this repository: -->
 docker tag ecr-django-api:latest public.ecr.aws/h9x1m6c8/ecr-django-api:latest
 docker tag jondebosco/django-api:latest public.ecr.aws/h9x1m6c8/ecr-django-api:v1.0
+
+docker tag djangoapi:latest public.ecr.aws/h9x1m6c8/ecr-djangoapi:latest
+docker push public.ecr.aws/h9x1m6c8/ecr-djangoapi:latest
 <!-- Run the following command to push this image to your newly created AWS repository: -->
 docker push public.ecr.aws/h9x1m6c8/ecr-django-api:v1.0
+---------------------------------------------------------------------------------------------------
+## AWS ECR / ECS to Elastic Beanstalk | EC2 | S3
+<!-- Create EB acc -->
+create EC2 key-pair
+PuTTY-User-Key-File-2: ssh-rsa
+Encryption: none
+Comment: admin-key-pair
+Public-Lines: 6
+AAAAB3NzaC1yc2EAAAADAQABAAABAQC5bJSEMsG2rmBCGlqf4qhjVZ7nr5BPAiLC
+bTGNrTqHmgwHU/oY6thayvVaGq0WfMrDIYuqGhdcrGRX+WbqoJppYwNFoI5nD/VL
+DzIzwMfm/KI74TL/T37OCAQoaolwwh+yeiTLD5Bjm4bw+bdHgo2fnu+6SpQS0J7T
+JyqLNMt6vqdNz20IQOmNS+ur3ghc+j4Z1DW4zAvtDXvlZ/XdeAmtdulUGq20DbQv
+lF9L/PATnYZIFOHdzzioJzcggGUQBaaZi8ZwLmT+wLAkjoLu4LEGlg1kxXtr1Ra1
+ZvgYno/yGQW3784NNx5GOkbV94s9JblD3DZfagpblar68Q2co5hX
+Private-Lines: 14
+AAABACUr4TIHQtIubtmRku1OcNdJCMwFY/aSxQkY/sAaJAufFB479X0dRzYcTcc8
+ZcqGRdeMWAVHqbtIS+1e8ATFIW9TDArfPuzmRBRB/ZxmXyytJJDAeoq4EwGWlc7M
+XLUgFV6gIdQbUKTHPuv8A4PwZhfDsuczoC+NZumJhnvVn50BV+3apNsseR8VsB+K
+e8vrvgHNHo91vjnZirRuWwrfqr4gYt1eRNAGIT/edT/tuCd13IvR4efXa9X7aC9H
+9tcyRmd5qgoQCKXTZq9tcfD8sZQpGK5t5TUaI+kEUPnxUwua9yYoLBBNud+0qZFY
+UZdrR0P5UaDXgvImswXDX6q2skEAAACBAOUcSHkUW9bCibXCYvV1qECqPmSPXzBI
+L8EBQSsPr/ePulvcEoYw+NDcA1IQxzf4/C6WijrNiNGvePf9cMUmb8D8fpY5sUcP
+twcqMgos4Jcb7H3uiuQbB66j9FqOtpU2rdu+b74axsfPOt0oAEItHjzfEvT1zlx1
+mDq9n2ObL6+HAAAAgQDPL7ksMPmu6wy9Cgxyw6HDzokRBhyVgRho0aidVvv8zZcf
+B7IQZYX08PnSnIpSy6zCyrVevSnDz9CdoMdA1vmDrzXsIs6XXrBANT5mAR70huI1
+LOnPueF08epze+jlPbK9JVsTGCqxeRd41s9IcbZfw781cgDuDRWxx5SCpLHksQAA
+AIBTWCLV/+rC5PaNb3Ck4wQwTT3WGxze1htiXNw6H07LcaBkWL3lGLvWVf9bI5AX
+14NWqmtUzdug+nFgX8F5pEKApiuZE9GHZbPVhjXc7oe8icm6DWEXqBl03w91k80g
+rgD4wWM6Y75qPpyMtMe178T/GA5oud+J2X+hX7muvU1f7g==
+Private-MAC: 37b5e0e4886ce86b514453fa49889401d1b92c2e
+
 ---------------------------------------------------------------------------------------------------
 ## Nano CMDs 
 1. Ctrl + G: Display the help menu with a list of available commands.
@@ -715,14 +641,14 @@ db.updateUser(
       {role: "dbOwner", db: "tiktok"}]
     }
 )
-
 ===================================================================================================
 ## GIT & GITHUB
+===================================================================================================
 <!-- ### Create local repo and commit -->
 git status
+git init 
 git init -b main
-git add .
-<!--or git add filename.txt -->
+git add . <!--to add all files or `git add CMDs-Readme.md` -->
 git commit -m "First commit"
 <!-- git commit -m "updated Readme.md"
 git commit -m "added  requirements.txt" -->
