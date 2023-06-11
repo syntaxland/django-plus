@@ -69,6 +69,7 @@ npm install axios react-router-dom@5.3.4 bootstrap redux react-redux react-boots
 
 ---------------------------------------------------------------------------------------------------
 
+
 ===================================================================================================
 ## DevOps | Git & GitHub | Docker | Kubernetes | CI/CD
 ===================================================================================================
@@ -99,6 +100,7 @@ rm -rf .git
 git branch <!--To see local -->
 git branch -r <!--To see remote... git checkout <remote-branch-name> -->
 git branch -a <!--To see both -->
+---------------------------------------------------------------------------------------------------
 ## Docker && Docker Compose CMDs 
 docker -v
 docker version
@@ -148,7 +150,6 @@ docker-compose up -d
 <!-- Some Docker Volume CMDs-->
 docker volume ls
 docker volume rm
----------------------------------------------------------------------------------------------------
 ### Docker Exec 'vi' CMDs:
 1. i: Enter insert mode to start inserting text at the cursor position.
 2. Esc: Exit insert mode and return to command mode.
@@ -249,12 +250,21 @@ Type services.msc
 
 15. kubectl label: Adds or updates labels of a resource.
     Example: kubectl label pod/my-pod environment=production
+
+<!-- Deploying fullstack app with kube -->
+
+kubectl create -f mongo-d.yml
+kubectl create -f mongo-s.yml
+
+<!-- Debugging: Unable to connect to the server: net/http: request canceled (Client.Timeout exceeded while awaiting headers) -->
+$ unset http_proxy
+$ unset https_proxy
 ---------------------------------------------------------------------------------------------------
 ### CI/CD | GitHub Actions | AWS CodePipeline | Jenkins
 ---------------------------------------------------------------------------------------------------
 #### GitHub Actions
 ---------------------------------------------------------------------------------------------------
-#### CodePipeline
+#### AWS CodePipeline
 ---------------------------------------------------------------------------------------------------
 #### Jenkins
 ---------------------------------------------------------------------------------------------------
@@ -268,7 +278,7 @@ Type services.msc
 ===================================================================================================
 ## Cloud | AWS | GCP | Azure
 ===================================================================================================
-## AWS CLI | ECR CMDs:
+## AWS ECR | ECS | Elastic Beanstalk | EC2 | S3 | 
 <!-- Pushing Docker Image from Docker Hub to AWS ECR -->
 Create Groups | e.g. admin-group
 Create Users  | e.g. admin
@@ -344,9 +354,9 @@ pip install awscli
 <!-- Then run: -->
 aws configure
 AWS Access Key ID [****************POHU]: 
-<!-- e.g.AKIAVUDETP7MQFFEKFNU -->
+<!-- e.g.AKIAVUDETP7MQFFEKFNUJ -->
 AWS Secret Access Key [****************QbQT]: 
-<!-- e.g.MIyupSJA5UdFvRJIKhhUQ6HzMFCN25Wd4IBzPMo6 -->
+<!-- e.g.MIyupSJA5UdFvRJIKhhUQ6HzMFCN25Wd4IBzPMo6J -->
 Default region name [None]: 
 <!-- e.g. region=us-east-1 -->
 Default output format [None]: 
@@ -368,19 +378,19 @@ docker push public.ecr.aws/h9x1m6c8/ecr-djangoapi:latest
 <!-- Run the following command to push this image to your newly created AWS repository: -->
 docker push public.ecr.aws/h9x1m6c8/ecr-django-api:v1.0
 ---------------------------------------------------------------------------------------------------
-## AWS ECR / ECS to Elastic Beanstalk | EC2 | S3
+## AWS ECR | ECS | Elastic Beanstalk | EC2 | S3
 <!-- Create EB acc -->
 create EC2 key-pair
 PuTTY-User-Key-File-2: ssh-rsa
 Encryption: none
 Comment: admin-key-pair
 Public-Lines: 6
-<!-- AAAAB3NzaC1yc2EAAAADAQABAAABAQC5bJSEMsG2rmBCGlqf4qhjVZ7nr5BPAiLC
+<!--AAAAB3NzaC1yc2EAAAADAQABAAABAQC5bJSEMsG2rmBCGlqf4qhjVZ7nr5BPAiLC
 bTGNrTqHmgwHU/oY6thayvVaGq0WfMrDIYuqGhdcrGRX+WbqoJppYwNFoI5nD/VL
 DzIzwMfm/KI74TL/T37OCAQoaolwwh+yeiTLD5Bjm4bw+bdHgo2fnu+6SpQS0J7T
 JyqLNMt6vqdNz20IQOmNS+ur3ghc+j4Z1DW4zAvtDXvlZ/XdeAmtdulUGq20DbQv
 lF9L/PATnYZIFOHdzzioJzcggGUQBaaZi8ZwLmT+wLAkjoLu4LEGlg1kxXtr1Ra1
-ZvgYno/yGQW3784NNx5GOkbV94s9JblD3DZfagpblar68Q2co5hX
+ZvgYno/yGQW3784NNx5GOkbV94s9JblD3DZfagpblar68Q2co5hXB
 Private-Lines: 14
 AAABACUr4TIHQtIubtmRku1OcNdJCMwFY/aSxQkY/sAaJAufFB479X0dRzYcTcc8
 ZcqGRdeMWAVHqbtIS+1e8ATFIW9TDArfPuzmRBRB/ZxmXyytJJDAeoq4EwGWlc7M
@@ -395,8 +405,8 @@ B7IQZYX08PnSnIpSy6zCyrVevSnDz9CdoMdA1vmDrzXsIs6XXrBANT5mAR70huI1
 LOnPueF08epze+jlPbK9JVsTGCqxeRd41s9IcbZfw781cgDuDRWxx5SCpLHksQAA
 AIBTWCLV/+rC5PaNb3Ck4wQwTT3WGxze1htiXNw6H07LcaBkWL3lGLvWVf9bI5AX
 14NWqmtUzdug+nFgX8F5pEKApiuZE9GHZbPVhjXc7oe8icm6DWEXqBl03w91k80g
-rgD4wWM6Y75qPpyMtMe178T/GA5oud+J2X+hX7muvU1f7g==
-Private-MAC: 37b5e0e4886ce86b514453fa49889401d1b92c2e -->
+rgD4wWM6Y75qPpyMtMe178T/GA5oud+J2X+hX7muvU1f7g==B
+Private-MAC: 37b5e0e4886ce86b514453fa49889401d1b92c2eB-->
 
 ---------------------------------------------------------------------------------------------------
 ## Nano CMDs 
@@ -431,7 +441,7 @@ Private-MAC: 37b5e0e4886ce86b514453fa49889401d1b92c2e -->
 29. Alt + H: Show/hide line numbers.
 30. Alt + Space: Set/unset the mark.
 ===================================================================================================
-## Databases | postgres | mysql | mongo|
+## Databases | postgres | mysql | mongo
 ===================================================================================================
 ### postgres CMDs
 <!-- CONNECTIONS -->
