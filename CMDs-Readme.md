@@ -14,7 +14,7 @@ source venv/bin/activate <!-- To activate venv for Ubuntu/Unix MacOS -->
 deactivate <!-- To deactivate venv for Ubuntu/Unix MacOS -->
 
 django-admin startproject core . <!-- To startproject -->
-py manage.py startapp blogapi <!-- To startapp -->
+py manage.py startapp blog <!-- To startapp -->
 
 py manage.py makemigrations <!-- To make migrations for db model(s) -->
 py manage.py migrate <!-- To migrate db -->
@@ -30,10 +30,23 @@ pip install --upgrade pip
 pip install django python-dotenv Pillow gunicorn
 pip install djangorestframework django-cors-headers 
 pip install psycopg2-binary mysqlclient djongo
-<!-- For testing-->
+<!-- Django testing with `coverage` -->
 pip install coverage
-coverage run --omit='*/venv/*' manage.py test
+coverage --version
+coverage report
 coverage html
+coverage run --omit='*/venv/*' manage.py test
+py manage.py test
+<!-- flake8 and pep8 -->
+pip install flake8
+<!-- 
+#setup.cfg
+[flake8]
+exclude = .git,*migrations*,*venv*
+max-line-length = 119 
+#Run `flake8` 
+-->
+pip install pep8
 ===================================================================================================
 ## Frontend | React | React Native | Vue | Angular | Flutter
 ===================================================================================================
@@ -76,7 +89,7 @@ npm install axios react-router-dom@5.3.4 bootstrap redux react-redux react-boots
 ### GIT & GITHUB
 <!-- ### Create local repo and commit -->
 git status
-git init -b main
+git init <!-- or `git init -b main` -->
 git add . <!--to add all files or `git add CMDs-Readme.md` -->
 git commit -m "First commit"
 <!-- git commit -m "updated CMDs-Readme.md"
@@ -100,6 +113,9 @@ rm -rf .git
 git branch <!--To see local -->
 git branch -r <!--To see remote... git checkout <remote-branch-name> -->
 git branch -a <!--To see both -->
+<!-- Pulling from remote origin -->
+git pull origin main
+
 ---------------------------------------------------------------------------------------------------
 ## Docker && Docker Compose CMDs 
 docker -v
@@ -251,10 +267,135 @@ Type services.msc
 15. kubectl label: Adds or updates labels of a resource.
     Example: kubectl label pod/my-pod environment=production
 
-<!-- Deploying fullstack app with kube -->
+<!-- 50 key commands in Kubernetes along with a brief explanation of each: -->
+1. kubectl version
+<!-- : Check the client and server versions of kubectl. -->
+2. kubectl cluster-info
+<!-- : Display information about the Kubernetes cluster, including the API server address. -->
+3. kubectl get nodes
+<!-- : List all the nodes in the cluster, showing their status and metadata. -->
+4. kubectl get pods
+<!-- : List all the pods in the cluster, including their statuses and associated nodes. -->
+5. kubectl get services
+<!-- : List all the services in the cluster, including their types, cluster IP, and external endpoints. -->
+6. kubectl get deployments
+<!-- : List all the deployments in the cluster, showing their replicas and current status. -->
+7. kubectl create deployment
+<!-- : Create a deployment from an image, specifying the replica count and labels. -->
+8. kubectl apply -f file.yaml
+<!-- : Apply a configuration file to create or update resources in the cluster. -->
+9. kubectl describe pod pod-name
+<!-- : Show detailed information about a specific pod, including its events and configuration. -->
+10. kubectl delete deployment deployment-name
+<!-- : Delete a deployment and its associated pods, services, and replica sets. -->
+11. kubectl logs pod-name
+<!-- : Print the logs of a specific pod, helping in troubleshooting and debugging. -->
+12. kubectl exec -it pod-name -- command
+<!-- : Run a command in an interactive shell inside a specific pod. -->
+13. kubectl port-forward pod-name local-port:pod-port
+<!-- : Forward a local port to a port on a specific pod, allowing direct access. -->
+14. kubectl get events
+<!-- : List events from the cluster, including resource creations, updates, and deletions. -->
+15. kubectl scale deployment deployment-name --replicas=num
+<!-- : Scale the number of replicas in a deployment up or down. -->
+16. kubectl expose deployment deployment-name --port=port
+<!-- : Expose a deployment as a service, making it accessible within the cluster. -->
+17. kubectl rollout status deployment deployment-name
+<!-- : Monitor the status of a deployment rollout, showing progress and revisions. -->
+18. kubectl rollout undo deployment deployment-name
+<!-- : Rollback a deployment to a previous revision, reverting any changes. -->
+19. kubectl label pod pod-name key=value
+<!-- : Add or update labels on a specific pod, helping with resource organization and management. -->
+20. kubectl annotate pod pod-name key=value
+<!-- : Add or update annotations on a specific pod, providing additional information. -->
+21. kubectl patch deployment deployment-name -p '{"spec":{"replicas": num}}'
+<!-- : Update the number of replicas in a deployment using a patch. -->
+22. kubectl get configmaps
+<!-- : List all the config maps in the cluster, showing their names and data. -->
+23. kubectl get secrets
+<!-- : List all the secrets in the cluster, displaying their names and types. -->
+24. kubectl get namespaces
+<!-- : List all the namespaces in the cluster, showing their names and statuses. -->
+25. kubectl create namespace namespace-name
+<!-- : Create a new namespace for isolating resources and access control. -->
+26. kubectl explain resource-name
+<!-- : Get detailed information about a specific Kubernetes resource, including its properties and fields. -->
+27. kubectl top pods
+<!-- : Display resource usage (CPU/memory) of pods, helping in performance monitoring. -->
+28. kubectl rollout history deployment deployment-name
+<!-- : View the rollout history of a deployment, including revisions and changes. -->
+29. kubectl rollout restart deployment deployment-name
+<!-- : Restart a deployment from the current revision, triggering a redeployment. -->
+30. kubectl autoscale deployment deployment-name --min=num --max=num --cpu-percent=num
+<!-- : Automatically scale a deployment based on CPU utilization. -->
+31. kubectl edit resource-name resource-name
+<!-- : Edit a resource in a text editor, allowing direct modification of its configuration. -->
+32. kubectl taint node node-name key=value
+<!-- :taint-effect: Set or remove -->
 
+ taints on a specific node, affecting pod scheduling.
+33. kubectl drain node-name
+<!-- : Safely evict pods from a node before maintenance, ensuring availability and rescheduling. -->
+34. kubectl cordon node-name
+<!-- : Mark a node as unschedulable, preventing new pods from being assigned to it. -->
+35. kubectl uncordon node-name
+<!-- : Mark a node as schedulable, allowing new pods to be assigned to it. -->
+36. kubectl attach pod-name -c container-name: Attach to a running container in a pod, enabling terminal access.
+37. kubectl exec -it pod-name -c container-name -- command
+<!-- : Open an interactive shell in a specific container of a pod. -->
+38. kubectl logs -f pod-name -c container-name
+<!-- : Stream the logs of a specific container in a pod in real-time. -->
+39. kubectl port-forward pod-name local-port:pod-port -c container-name
+<!-- : Forward ports from a specific container of a pod to your local machine. -->
+40. kubectl rollout pause deployment deployment-name
+<!-- : Pause a deployment rollout, preventing further updates and rollouts. -->
+41. kubectl rollout resume deployment deployment-name
+<!-- : Resume a paused deployment rollout, allowing updates and rollouts to proceed. -->
+42. kubectl exec -it pod-name -n namespace -- command
+<!-- : Open an interactive shell in a specific pod within a specific namespace. -->
+43. kubectl logs -f pod-name -n namespace
+<!-- : Stream the logs of a specific pod within a specific namespace in real-time. -->
+44. kubectl top pods -n namespace
+<!-- : Display resource usage (CPU/memory) of pods within a specific namespace. -->
+45. kubectl get ingresses
+<!-- : List all the ingresses in the cluster, showing their hosts and backends. -->
+46. kubectl apply --dry-run -f file.yaml
+<!-- : Perform a dry run of applying a configuration file without making any changes. -->
+47. kubectl get pods --all-namespaces
+<!-- : List all the pods in all namespaces, providing a cluster-wide view. -->
+48. kubectl rollout restart deployment deployment-name -n namespace
+<!-- : Restart a deployment within a specific namespace from the current revision. -->
+49. kubectl get deployments -l key=value
+<!-- : List all the deployments with a specific label selector. -->
+50. kubectl create secret generic secret-name --from-literal=key=value
+<!-- : Create a secret with a key-value pair to store sensitive information. -->
+<!-- 
+These commands cover a range of common scenarios and tasks in Kubernetes and can serve  in managing clusters and resources effectively. -->
+
+<!-- Deploying fullstack app with kube -->
 kubectl create -f mongo-d.yml
 kubectl create -f mongo-s.yml
+
+kubectl create -f server-d.yml
+kubectl create -f server-s.yml
+
+kubectl create -f app-d.yml
+kubectl create -f app-s.yml
+
+<!-- 
+kubectl delete -f mongo-d.yml
+kubectl delete -f mongo-s.yml
+
+kubectl delete -f server-d.yml
+kubectl delete -f server-s.yml
+
+kubectl delete -f app-d.yml
+kubectl delete -f app-s.yml 
+
+-->
+
+<!-- kubectl apply -f app-d.yml
+kubectl apply -f app-s.yml -->
 
 <!-- Debugging: Unable to connect to the server: net/http: request canceled (Client.Timeout exceeded while awaiting headers) -->
 $ unset http_proxy
@@ -616,8 +757,7 @@ db.dropDatabase() <!-- -- Drop Database -->
 show collections
 db.createCollection('posts') <!-- -- Create Collection -->
 db.collection.renameCollection( newName, { dropTarget: <boolean> } ) <!-- -- To Rename a collection -->
-<!-- -- To delete collection -->
-db.posts.drop()
+db.posts.drop() <!-- -- To delete collection -->
 <!-- -- Insert Document -->
 db.posts.insertOne({
   title: 'Post 1',
