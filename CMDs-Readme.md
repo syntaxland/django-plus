@@ -90,10 +90,13 @@ npm install axios react-router-dom@5.3.4 bootstrap redux react-redux react-boots
 <!-- ### Create local repo and commit -->
 git status
 git init <!-- or `git init -b main` -->
-git add . <!--to add all files or `git add CMDs-Readme.md` -->
-git commit -m "First commit"
-<!-- git commit -m "updated CMDs-Readme.md"
-git commit -m "added  requirements.txt" -->
+git add . <!--or to add all files `git add CMDs-Readme.md` -->
+git commit -m "first commit"
+<!-- 
+git commit -m "updated CMDs-Readme.md"
+git commit -m "added  requirements.txt"
+git commit -m "updated coverage-test.yml
+ -->
 
 <!-- Create Remote Repo -->
 <!-- ### Push to remote repo -->
@@ -549,6 +552,8 @@ AIBTWCLV/+rC5PaNb3Ck4wQwTT3WGxze1htiXNw6H07LcaBkWL3lGLvWVf9bI5AX
 rgD4wWM6Y75qPpyMtMe178T/GA5oud+J2X+hX7muvU1f7g==B
 Private-MAC: 37b5e0e4886ce86b514453fa49889401d1b92c2eB-->
 
+---------------------------------------------------------------------------------------------------
+## AWS EC
 ---------------------------------------------------------------------------------------------------
 ## Nano CMDs 
 1. Ctrl + G: Display the help menu with a list of available commands.
