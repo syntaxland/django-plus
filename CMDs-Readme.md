@@ -14,14 +14,14 @@ source venv/bin/activate <!-- To activate venv for Ubuntu/Unix MacOS -->
 deactivate <!-- To deactivate venv for Ubuntu/Unix MacOS -->
 
 django-admin startproject core . <!-- To startproject -->
-py manage.py startapp blog <!-- To startapp -->
+python manage.py startapp blog <!-- To startapp -->
 
-py manage.py makemigrations <!-- To make migrations for db model(s) -->
-py manage.py migrate <!-- To migrate db -->
+python manage.py makemigrations <!-- To make migrations for db model(s) -->
+python manage.py migrate <!-- To migrate db -->
 
-py manage.py runserver <!-- To open at default port or: py manage.py runserver 8001 -->
-py manage.py shell <!-- To run the shell -->
-py manage.py createsuperuser <!-- To create super user -->
+python manage.py runserver <!-- To open at default port or: py manage.py runserver 8001 -->
+python manage.py shell <!-- To run the shell -->
+python manage.py createsuperuser <!-- To create super user -->
 
 pip freeze > requirements.txt <!-- To freeze requirements.txt-->
 pip install -r requirements.txt <!-- To install requirements.txt-->
@@ -47,6 +47,59 @@ max-line-length = 119
 #Run `flake8` 
 -->
 pip install pep8
+---------------------------------------------------------------------------------------------------
+
+### Some Basic CLI Setup and CMDs for Viewsets
+<!-- Ex -->
+>>> import os
+>>> import django
+>>> os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'yoursite.settings')
+>>> django.setup()
+>>> from bookapp.models import YourModel
+#### Model QuerySets
+YourModel.objects.all()
+Product.objects.all()
+<!-- Creating model instance -->
+user = User.objects.create(username='ken')
+email = 'user@gmail.com'
+email_otp = EmailVerification.objects.create(user=user, email=email)
+<!-- Deleting a model instance(s) -->
+Product.objects.all().delete()
+Product.objects.filter().first().delete()
+#### User Model QuerySets
+User.objects.all()
+User.objects.filter().last()
+<!-- Creating a user -->
+user = User.objects.create_user('testuser', password='testpassword')
+<!-- Deleting user(s) -->
+User.objects.all().delete()
+User.objects.filter().first().delete()
+<!-- Esc deleting superuser -->
+User.objects.filter(is_superuser=False).delete()
+<!-- customuser operations -->
+CustomUser.objects.filter().last()
+##### Some commonly used QuerySets for the User model in Django:
+<!-- Get a single user by username: -->
+user = User.objects.get(username='some_username')
+<!-- Get all users: -->
+users = User.objects.all()
+
+for obj in User.objects.iterator():
+    print(obj)
+<!-- Get a count of all users: -->
+user_count = User.objects.count()
+<!-- Get all superusers: -->
+superusers = User.objects.filter(is_superuser=True)
+<!-- Get all active users: -->
+active_users = User.objects.filter(is_active=True)
+<!-- Get all users ordered by their join date: -->
+users_ordered_by_join_date = User.objects.order_by('date_joined')
+<!-- Get all users whose first name is "John": -->
+johns = User.objects.filter(first_name='John')
+<!-- Get all users who have not verified their email: -->
+unverified_users = User.objects.filter(emailverified=False)
+<!-- Get all users whose last login time was more than a week ago: -->
+inactive_users = User.objects.filter(last_login__lte=timezone.now() - timezone.timedelta(minutes=1))
 ===================================================================================================
 ## Frontend | React | React Native | Vue | Angular | Flutter
 ===================================================================================================
@@ -95,7 +148,8 @@ git commit -m "first commit"
 <!-- 
 git commit -m "updated CMDs-Readme.md"
 git commit -m "added  requirements.txt"
-git commit -m "updated coverage-test.yml
+git commit -m "updated  requirements.txt"
+git commit -m "updated settings.py"
  -->
 
 <!-- Create Remote Repo -->
@@ -106,7 +160,7 @@ git push -u origin main
 
 <!-- ### Update to remote repo -->
 git remote -v
-git push origin main
+git push origin main 
 
 <!-- ### To reinitialize -->
 ls -a
@@ -375,6 +429,18 @@ Type services.msc
 <!-- 
 These commands cover a range of common scenarios and tasks in Kubernetes and can serve  in managing clusters and resources effectively. -->
 
+<!-- Stopping kubernetes pods: -->
+kubectl get pods
+kubectl delete pod <pod-name>
+kubectl delete pod pod1 pod <!-- or kubectl delete pod -l <label-selector> -->
+kubectl delete pod server-57674c8695-rnpv2 
+kubectl delete pod mongo-6cf8cb4db5-kz9hq myapp-79f957b9b9-97db5 server-57674c8695-rnpv2 
+<!-- To run Kubernetes containers: -->
+kubectl get deployments
+kubectl get replicationcontrollers
+kubectl scale deployment <deployment-name> --replicas=<desired-replicas>
+kubectl apply -f <path-to-updated-config-file>
+
 <!-- Deploying fullstack app with kube -->
 kubectl create -f mongo-d.yml
 kubectl create -f mongo-s.yml
@@ -407,10 +473,23 @@ $ unset https_proxy
 ### CI/CD | GitHub Actions | AWS CodePipeline | Jenkins
 ---------------------------------------------------------------------------------------------------
 #### GitHub Actions
+
 ---------------------------------------------------------------------------------------------------
-#### AWS CodePipeline
+#### AWS CodePipeline | CodeDeploy
+
 ---------------------------------------------------------------------------------------------------
 #### Jenkins
+##### Jenkins for Docker
+<!-- Run  -->
+<!-- docker run -p 8080:8080 -p 50000:50000 -v jenkins_home:/var/jenkins_home -d jenkins - Deprecated-->
+<!-- docker run -p 8080:8080 -p 50000:50000 -v jenkins_home:/var/jenkins_home jenkins/jenkins:lts  -->
+docker pull jenkins/jenkins
+docker run -p 8080:8080 --name=jenkins-master -d jenkins/jenkins
+docker run -p 8080:8080 --name=jenkins-master -p 50000:50000 -v jenkins_home:/var/jenkins_home -d jenkins/jenkins
+<!-- Copy OTP password and access the admin page at port 8080 
+e.g.74384cabdfa04b2ba1ab0d4e203cf02d--> 
+Install all recommended plugins 
+docker run jenkins --version
 ---------------------------------------------------------------------------------------------------
 #### Circle CI
 ---------------------------------------------------------------------------------------------------
@@ -553,9 +632,117 @@ rgD4wWM6Y75qPpyMtMe178T/GA5oud+J2X+hX7muvU1f7g==B
 Private-MAC: 37b5e0e4886ce86b514453fa49889401d1b92c2eB-->
 
 ---------------------------------------------------------------------------------------------------
-## AWS EC
+## AWS EC2 SSH Local Connection & CI-CD Django Deplmt
+## EC2 
+<!-- free tier instances -->
+t2.micro
+t3.micro
+<!-- create EC2 instance (using chosen OS e.g. ubuntu) and key-pair then save at your local env
+Navigate to the dir and run: -->
+chmod 400 instance-name.pem
+ssh -i "instance-name.pem" ubuntu@ec2-44-201-233-114.compute-1.amazonaws.com
+<!-- ssh -i "django-server.pem" ubuntu@ec2-44-201-233-114.compute-1.amazonaws.com -->
+sudo apt update
+sudo apt install ruby-full
+sudo apt install wget
+wget https://aws-codedeploy-us-east-1.s3.us-east-1.amazonaws.com/latest/install
+chmod +x ./install
+<!-- to install the codedeploy-agent, run this command: -->
+sudo ./install auto > /tmp/logfile
+<!-- Here we are logging the output of the installation to the /tmp/logfile file. To check if the codedeploy-agent is running, enter this command: -->
+sudo service codedeploy-agent status
+<!-- % If it is not running, enter this command to start the codedeploy-agent service: -->
+##### Error Handling
+tail -f /var/log/aws/codedeploy-agent/codedeploy-agent.log
+<!-- Missing credentials - please check if this instance was started with an IAM instance profile Go to IAM console -> Roles -> Create new role
+Select AWS Service -> EC2 -> Next: Permissions(don't change anything) -> Next: Tags -> Next: Review -> Give the name and click Create role.
+Go to AWS EC2 console -> select instance -> Actions -> Instance settings -> Attach/replace IAM role -> Select IAM role you just created
+Restart codedeploy agent: sudo service codedeploy-agent restart
+Try to deploy again and it should work
+-->
+sudo service codedeploy-agent restart
+<!-- The overall deployment failed because too many individual instances failed deployment, too few healthy instances are available for deployment, or some instances in your deployment group are experiencing problems. -->
+checkout the pipeline log file to view specific error, fix sg, check your codes, ... 
+<!-- #### For Uncomplicated Firewall -->
+sudo ufw disable
+<!-- django.db.utils.OperationalError: unable to open database file -->
+sudo chown www-data .
+
+<!-- ##### httpd -->
+Step 1: Become the root user. command: sudo su
+Step 2: Update Kernal command: apt update -y
+Step 3: Install Apache command: apt install httpd -y
+Step 4: Start Apache command: service httpd start
+Step 5: Check Status of Service command: service httpd status
+
+<!-- Search CodePipeline in the AWS console-->
+create codebuild
+create codedeploy
+create artifacts
+create codepipeline
+### Running Django on Live Sever 
+<!-- SSH into the project root dir -->
+gunicorn <project_name>.wsgi:application --bind 0.0.0.0:<port>
+gunicorn backend_drf.wsgi:application --bind 0.0.0.0:8000
+<!-- To save the logs -->
+gunicorn <project_name>.wsgi:application --bind 0.0.0.0:<port> >> logs.txt 2>&1
+---------------------------------------------------------------------------------------------------
+## ECS
+<!-- Setup -->
+Create cluster 
+Create task 
+Deploy task
+Checkout ECS - EC2 instance
+Setup security group (click on `Default` and `Edit`)
+---------------------------------------------------------------------------------------------------
+
+## S3
+<!-- Setup -->
+Create bucket
+<!-- Create bucket policy -->
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowPublicRead",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::mcdofglobal/*"
+        }
+    ]
+}
+
+<!-- Setup CORS -->
+[
+    {
+        "AllowedHeaders": [
+            "*"
+        ],
+        "AllowedMethods": [
+            "GET",
+            "PUT",
+            "POST",
+            "HEAD",
+            "DELETE"
+        ],
+        "AllowedOrigins": [
+            "*"
+        ],
+        "ExposeHeaders": [],
+        "MaxAgeSeconds": 3000
+    }
+]
 ---------------------------------------------------------------------------------------------------
 ## Nano CMDs 
+<!-- AWS Ubuntu Basics -->
+pwd - to checkout working dir
+sudo touch .env - to create the file
+sudo nano .env - to open the file
+Control + O - to save the file
+Press Enter - to execute
+Control + X - to exit
+<!-- Others -->
 1. Ctrl + G: Display the help menu with a list of available commands.
 2. Ctrl + O: Save the current file (write Out).
 3. Ctrl + X: Exit Nano. If changes were made, it prompts to save the file first.
