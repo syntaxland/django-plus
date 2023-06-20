@@ -49,15 +49,16 @@ max-line-length = 119
 pip install pep8
 ---------------------------------------------------------------------------------------------------
 
-### Some Basic CLI Setup and CMDs for Viewsets
+### Some Basic CLI Setup and CMDs for QuerySets
+python manage.py shell
 <!-- Ex -->
 >>> import os
 >>> import django
 >>> os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'yoursite.settings')
 >>> django.setup()
->>> from bookapp.models import YourModel
+from django.contrib.auth.models import User
+from app.models import Product
 #### Model QuerySets
-YourModel.objects.all()
 Product.objects.all()
 <!-- Creating model instance -->
 user = User.objects.create(username='ken')
@@ -124,6 +125,20 @@ npm install -g react-devtools
 npm install react-phone-number-input <!-- phone number input form with country code -->
 
 npm install axios react-router-dom@5.3.4 bootstrap redux react-redux react-bootstrap react-phone-number-input material-ui
+
+<!-- .env config -->
+DANGEROUSLY_DISABLE_HOST_CHECK=true
+SKIP_PREFLIGHT_CHECK=true
+axios.get(`${process.env.REACT_APP_API_URL}/api`)
+REACT_APP_API_URL = 'http://localhost:8000'
+REACT_APP_API_URL = 'http://ec2-54-84-220-209.compute-1.amazonaws.com'
+"proxy": "http://ec2-54-84-220-209.compute-1.amazonaws.com"
+<!-- config.js -->
+const config = {
+  apiUrl: process.env.REACT_APP_API_URL || 'http://localhost:8000',
+};
+
+export default config;
 ---------------------------------------------------------------------------------------------------
 ## React Native CMDs
 
@@ -150,6 +165,7 @@ git commit -m "updated CMDs-Readme.md"
 git commit -m "added  requirements.txt"
 git commit -m "updated  requirements.txt"
 git commit -m "updated settings.py"
+git commit -m "added buildspec.yml"
  -->
 
 <!-- Create Remote Repo -->
@@ -663,29 +679,73 @@ Try to deploy again and it should work
 sudo service codedeploy-agent restart
 <!-- The overall deployment failed because too many individual instances failed deployment, too few healthy instances are available for deployment, or some instances in your deployment group are experiencing problems. -->
 checkout the pipeline log file to view specific error, fix sg, check your codes, ... 
-<!-- #### For Uncomplicated Firewall -->
-sudo ufw disable
-<!-- django.db.utils.OperationalError: unable to open database file -->
-sudo chown www-data .
-
-<!-- ##### httpd -->
-Step 1: Become the root user. command: sudo su
-Step 2: Update Kernal command: apt update -y
-Step 3: Install Apache command: apt install httpd -y
-Step 4: Start Apache command: service httpd start
-Step 5: Check Status of Service command: service httpd status
-
 <!-- Search CodePipeline in the AWS console-->
 create codebuild
 create codedeploy
 create artifacts
 create codepipeline
+<!-- #### For Uncomplicated Firewall -->
+sudo ufw disable
+<!-- django.db.utils.OperationalError: unable to open database file -->
+sudo chown www-data .
+<!-- ##### httpd -->
+<!-- Step 1: Become the root user. command: sudo su
+Step 2: Update Kernal command: apt update -y
+Step 3: Install Apache command: apt install httpd -y
+Step 4: Start Apache command: service httpd start
+Step 5: Check Status of Service command: service httpd status -->
+##### Quick AWS EC2 Ubuntu SSH Ops
+ssh -i "mcdofglobal-key-pair.pem" ubuntu@ec2-54-84-220-209.compute-1.amazonaws.com
+sudo su  <!--or sudo su - ubuntu -->
+ls <!-- or ls -a or ls -l or ls -a -l -->
+source env/bin/activate
+cd backend_drf 
+python manage.py makemigrations <!-- or python manage.py makemigrations app -->
+python manage.py migrate 
+python manage.py createsuperuser
+python manage.py shell
+<!-- some db fixing -->
+ls -l /home/ubuntu/backend_drf/db.sqlite3
+sudo chmod u+rw /home/ubuntu/backend_drf/db.sqlite3 <!-- grant the necessary permissions -->
+chmod +w /home/ubuntu/backend_drf/db.sqlite3 <!-- grant the necessary permissions -->
+chmod 664 /home/ubuntu/backend_drf/db.sqlite3 <!-- tem: `chmod 775 /home/ubuntu/backend_drf/db.sqlite3` or `chmod 774 .` sets the file permissions to read and write  -->
+chown <username> /home/ubuntu/backend_drf/db.sqlite3 <!-- chown ubuntu /home/ubuntu/backend_drf/db.sqlite3 -->
+cut -d: -f1 /etc/passwd <!-- to list the users -->
+<!-- granting more perm -->
+sudo chmod u+rw /home/ubuntu/backend_drf/requirements.txt
+sudo usermod -aG sudo ubuntu
 ### Running Django on Live Sever 
 <!-- SSH into the project root dir -->
-gunicorn <project_name>.wsgi:application --bind 0.0.0.0:<port>
-gunicorn backend_drf.wsgi:application --bind 0.0.0.0:8000
+gunicorn <project_name>.wsgi:application --bind 0.0.0.0:<port> <!-- gunicorn backend_drf.wsgi:application --bind 0.0.0.0:8000 -->
 <!-- To save the logs -->
-gunicorn <project_name>.wsgi:application --bind 0.0.0.0:<port> >> logs.txt 2>&1
+<!-- gunicorn <project_name>.wsgi:application --bind 0.0.0.0:<port> >> logs.txt 2>&1 -->
+ps aux | grep gunicorn 
+sudo pkill -HUP gunicorn <!--or kill -HUP <pid> or 33708 -->
+<!-- gunicorn backend_drf.wsgi:application --bind 0.0.0.0:8080 -->
+sudo systemctl restart nginx <!-- or sudo service nginx restart -->
+<!-- 502 Bad Gateway
+nginx/1.18.0 (Ubuntu) -->
+sudo systemctl status gunicorn
+<!-- sudo systemctl start gunicorn -->
+sudo systemctl restart nginx
+sudo systemctl restart gunicorn
+<!-- firewalls -->
+sudo ufw status 
+sudo ufw allow 80
+
+<!-- Debugging django live -->
+tail -f django.log
+
+---------------------------------------------------------------------------------------------------
+### AWS S3
+<!-- % Validate access to S3 buckets -->
+<!-- % 1.    Install the AWS CLI on your EC2 instance. -->
+sudo apt  install awscli
+aws --version
+<!-- % Note: If you receive errors when running AWS CLI commands, make sure that you’re using the most recent version of the AWS CLI.
+% 2.    Verify access to your S3 buckets by running the following command. Replace DOC-EXAMPLE-BUCKET with the name of your S3 bucket. -->
+aws s3 ls s3://DOC-EXAMPLE-BUCKET
+aws s3 ls s3://mcdofglobal
 ---------------------------------------------------------------------------------------------------
 ## ECS
 <!-- Setup -->
@@ -694,6 +754,47 @@ Create task
 Deploy task
 Checkout ECS - EC2 instance
 Setup security group (click on `Default` and `Edit`)
+---------------------------------------------------------------------------------------------------
+#### Creating AWS Secret Key
+# Use this code snippet in your app.
+# If you need more information about configurations
+# or implementing the sample code, visit the AWS docs:
+# https://aws.amazon.com/developer/language/python/
+
+import json
+import boto3
+import base64
+from botocore.exceptions import ClientError
+
+
+def lambda_handler(event, context):
+    environment  = event['env']
+    secret_name = 'mcdof/store/secret/keys'
+    region_name = "us-east-1"
+    
+    # Create a Secrets Manager client
+    session = boto3.session.Session()
+    client = session.client(
+        service_name='secretsmanager',
+        region_name=region_name
+    )
+
+    try:
+        secret_value_response = client.get_secret_value(
+            SecretId=secret_name
+        )
+    except ClientError as e:
+        raise e
+        
+    else:
+        if 'SecretString' in secret_value_response:
+            secret = json.loads(secret_value_response['SecretString'])
+            return secret
+        else:
+            decode_binary_secret = base64.base64decode(secret_value_response['SecretBinary'])
+            return decode_binary_secret
+
+
 ---------------------------------------------------------------------------------------------------
 
 ## S3
