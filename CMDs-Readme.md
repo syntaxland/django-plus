@@ -63,7 +63,7 @@ Product.objects.all()
 <!-- Creating model instance -->
 user = User.objects.create(username='ken')
 email = 'user@gmail.com'
-email_otp = EmailVerification.objects.create(user=user, email=email)
+product = Product.objects.create(user=user, email=email)
 <!-- Deleting a model instance(s) -->
 Product.objects.all().delete()
 Product.objects.filter().first().delete()
@@ -165,7 +165,8 @@ git commit -m "updated CMDs-Readme.md"
 git commit -m "added  requirements.txt"
 git commit -m "updated  requirements.txt"
 git commit -m "updated settings.py"
-git commit -m "added buildspec.yml"
+git commit -m "updated src+"
+git commit -m "updated buildspec.yml"
  -->
 
 <!-- Create Remote Repo -->
@@ -729,6 +730,7 @@ sudo systemctl status gunicorn
 <!-- sudo systemctl start gunicorn -->
 sudo systemctl restart nginx
 sudo systemctl restart gunicorn
+
 <!-- firewalls -->
 sudo ufw status 
 sudo ufw allow 80
@@ -746,6 +748,47 @@ aws --version
 % 2.    Verify access to your S3 buckets by running the following command. Replace DOC-EXAMPLE-BUCKET with the name of your S3 bucket. -->
 aws s3 ls s3://DOC-EXAMPLE-BUCKET
 aws s3 ls s3://mcdofglobal
+
+AWS_ACCESS_KEY_ID = None
+AWS_SECRET_ACCESS_KEY = None
+AWS_REGION = 'your-bucket-region'  # e.g., 'us-east-1'
+AWS_STORAGE_BUCKET_NAME = 'your-bucket-name'
+
+# Optional: Specify additional S3 settings (e.g., custom endpoint URL)
+# AWS_S3_ENDPOINT_URL = 'https://your-custom-endpoint-url'
+
+# Use the IAM role attached to the EC2 instance for authentication
+AWS_ACCESS_KEY_ID = None
+AWS_SECRET_ACCESS_KEY = None
+AWS_SESSION_TOKEN = None
+
+# Static and media file URLs
+STATIC_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/static/'
+MEDIA_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/media/'
+
+
+<!-- Here are 20 commonly used AWS S3 commands: -->
+1. aws s3 ls: Lists the contents of an S3 bucket.
+2. aws s3 cp: Copies files and directories to/from S3.
+3. aws s3 mv: Moves files and directories to/from S3.
+4. aws s3 sync: Syncs directories and S3 buckets recursively.
+5. aws s3 rm: Deletes objects from S3.
+6. aws s3 mb: Creates an S3 bucket.
+7. aws s3 rb: Deletes an empty S3 bucket.
+8. aws s3 website: Configures a bucket for static website hosting.
+9. aws s3 presign: Generates a pre-signed URL for an S3 object.
+10. aws s3api list-objects: Lists objects in an S3 bucket using the S3 API.
+11. aws s3api put-object: Uploads an object to S3 using the S3 API.
+12. aws s3api get-object: Downloads an object from S3 using the S3 API.
+13. aws s3api delete-object: Deletes an object from S3 using the S3 API.
+14. aws s3api create-bucket: Creates an S3 bucket using the S3 API.
+15. aws s3api delete-bucket: Deletes an S3 bucket using the S3 API.
+16. aws s3api put-bucket-policy: Sets a bucket policy for an S3 bucket.
+17. aws s3api put-bucket-cors: Sets CORS configuration for an S3 bucket.
+18. aws s3api get-bucket-location: Retrieves the region of an S3 bucket.
+19. aws s3api list-buckets: Lists all S3 buckets in the account.
+20. aws s3api head-object: Retrieves metadata about an object in S3 without downloading the object itself.
+
 ---------------------------------------------------------------------------------------------------
 ## ECS
 <!-- Setup -->
@@ -761,31 +804,30 @@ Setup security group (click on `Default` and `Edit`)
 # or implementing the sample code, visit the AWS docs:
 # https://aws.amazon.com/developer/language/python/
 
+#--------------------------------------------------------------------------------------------------
+""" 
+# AWS Secrets Manager for S3 Media Storages, Secret Keys, DB Env...
 import json
 import boto3
 import base64
 from botocore.exceptions import ClientError
 
-
 def lambda_handler(event, context):
     environment  = event['env']
-    secret_name = 'mcdof/store/secret/keys'
+    secret_name = 'mcdof/store/%s/keys' % environment
     region_name = "us-east-1"
-    
     # Create a Secrets Manager client
     session = boto3.session.Session()
     client = session.client(
         service_name='secretsmanager',
         region_name=region_name
     )
-
     try:
         secret_value_response = client.get_secret_value(
             SecretId=secret_name
         )
     except ClientError as e:
         raise e
-        
     else:
         if 'SecretString' in secret_value_response:
             secret = json.loads(secret_value_response['SecretString'])
@@ -793,7 +835,50 @@ def lambda_handler(event, context):
         else:
             decode_binary_secret = base64.base64decode(secret_value_response['SecretBinary'])
             return decode_binary_secret
+"""
 
+# OR
+
+"""
+import os
+import json
+import boto3
+from django.core.exceptions import ImproperlyConfigured
+
+# Helper function to get environment variables or raise an error
+def get_env_variable(var_name):
+    try:
+        return os.environ[var_name]
+    except KeyError:
+        error_msg = f"Environment variable '{var_name}' not set"
+        raise ImproperlyConfigured(error_msg)
+
+# Load Secrets Manager secrets
+def load_secrets():
+    secret_name = "your-secret-name"  
+    region_name = "your-aws-region"  
+
+    session = boto3.session.Session()
+    client = session.client(
+        service_name='secretsmanager',
+        region_name=region_name
+    )
+    response = client.get_secret_value(SecretId=secret_name)
+
+    if 'SecretString' in response:
+        secret = response['SecretString']
+    else:
+        secret = json.loads(response['SecretBinary'])
+
+    return json.loads(secret)
+
+# Load secrets from AWS Secrets Manager
+secrets = load_secrets()
+
+# Django Secret Key
+SECRET_KEY = get_env_variable('SECRET_KEY') or secrets.get('SECRET_KEY')
+"""
+#--------------------------------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------------------------------
 
