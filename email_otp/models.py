@@ -56,7 +56,7 @@ class EmailOTP(models.Model):
     code = models.CharField(max_length=6)
     is_verified = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=timezone.now)
-
+ 
     class Meta:
     #     db_table = 'sms otp db'
         ordering = ['-created_at']

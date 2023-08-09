@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from . models import Product
-from . forms import ProductForm
+from . forms import ProductForm 
 
 # Create your views here.
 

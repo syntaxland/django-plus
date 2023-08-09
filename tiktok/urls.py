@@ -25,7 +25,7 @@ urlpatterns = [
     path('api/', include('post.urls')),
     path('api/', include('users.urls')),
     # Auth
-    path('', include('captcha_app.urls')),
+    path('', include('captcha_app.urls')), 
     path('authentication/', include('email_auth_app.urls')),
     path('mailer/', include('send_mail.urls')),
     path('sendmail/', include('email_auth.urls')),

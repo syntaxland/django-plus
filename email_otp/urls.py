@@ -9,9 +9,9 @@
 
 
 from django.urls import path
-from . import views
+from . import views 
 
-urlpatterns = [
+urlpatterns = [ 
     # path('', views.login, name='login'),
     path('send-email-otp/', views.send_email_otp, name='send_email_otp'),
     path('verify-email-otp/', views.verify_email_otp, name='verify_email_otp'),

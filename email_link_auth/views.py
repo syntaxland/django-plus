@@ -4,7 +4,7 @@ import sib_api_v3_sdk
 from sib_api_v3_sdk.rest import ApiException
 
 from pprint import pprint
-from django.conf import settings
+from django.conf import settings 
 
 from django.http import HttpResponse
 from django.shortcuts import redirect, render, get_object_or_404

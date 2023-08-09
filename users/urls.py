@@ -3,7 +3,7 @@ from .views import *
 
 urlpatterns = [
     path('', getProile, name='getProile'),
-    path('api_users/', getApiUsers, name='api_users'),
+    path('api_users/', getApiUsers, name='api_users'), 
 
     # Using function-based @api_view decorators
     # path('custome-users/', getCustomeUsers, name='custome-users'), 

@@ -34,7 +34,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # The following apps are required (for django allauth):
+    # required for django allauth
     'django.contrib.sites',
     'allauth',
     'allauth.account',
@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     # 'allauth.socialaccount.providers.github',
 
     'captcha',
+
     'djoser',
     
     # restapi
@@ -75,12 +76,20 @@ INSTALLED_APPS = [
 
     # MongoDB conn 
     'djongo',
-    
+
+    # pip install django-crispy-forms crispy-bootstrap4
+    'crispy_forms',  # You will need to pip install crispy-bootstrap4 and add crispy_bootstrap4 to your list of INSTALLED_APPS.
+    # 'crispy_bootstrap4', 
+
     'phonenumber_field',
 
-    'crispy_forms',
+    
 ]
 
+# pip install django-crispy-forms crispy-bootstrap4
+# 'crispy_forms',  # You will need to pip install crispy-bootstrap4
+# and add crispy_bootstrap4 to your list of INSTALLED_APPS.
+     
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # LOGIN_URL ='/login/'
@@ -120,7 +129,7 @@ ROOT_URLCONF = 'tiktok.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [os.path.join(BASE_DIR / 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -148,16 +157,7 @@ WSGI_APPLICATION = 'tiktok.wsgi.application'
 #     }
 # }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'tiktok',
-        'USER': 'jb',
-        'PASSWORD': 'boz1234567',
-        'HOST': 'localhost',
-        'PORT': '3306',
-    }
-}
+
 
 # DATABASES = {
 #     'default': {
@@ -170,16 +170,16 @@ DATABASES = {
 #     }
 # }
 
-# DATABASES = {
-#      'default': {
-#        'ENGINE': 'django.db.backends.postgresql',
-#        'NAME': os.getenv('DB_NAME'),
-#         'USER': os.getenv('DB_USER'),
-#         'PASSWORD': os.getenv('DB_PASSWORD'),
-#         'HOST': os.getenv('DB_HOST'),
-#         'PORT': int(os.getenv('DB_PORT')),
-#      }
-# }
+DATABASES = {
+     'default': {
+       'ENGINE': 'django.db.backends.postgresql',
+       'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': int(os.getenv('DB_PORT')),
+     }
+}
 
 # DATABASES = {
 #     'default': {
@@ -235,7 +235,7 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media/'
- 
+
 
 # MEDIA_ROOT = 'static/images'
 

@@ -24,12 +24,11 @@ from rest_framework.response import Response
 
 
 # def gen_otp():
-#     code = str(random.randint(100000, 999999))
-#     return code
+#     str(random.randint(100000, 999999))
 # code = gen_otp()
-
+# print(code)
 code = str(random.randint(100000, 999999))
-
+# print(code)
 def send_email_otp(request):
 
     if request.method == 'POST':
@@ -64,7 +63,7 @@ def send_email_otp(request):
                 <p>Best regards,<br>Softglobal Team</p>
             </body>
             </html>
-            """
+            """ 
         sender_name = settings.EMAIL_SENDER_NAME
         sender_email = settings.EMAIL_HOST_USER
         sender = {"name":sender_name,"email":sender_email}

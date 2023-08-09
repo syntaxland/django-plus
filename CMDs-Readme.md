@@ -14,14 +14,14 @@ source venv/bin/activate <!-- To activate venv for Ubuntu/Unix MacOS -->
 deactivate <!-- To deactivate venv for Ubuntu/Unix MacOS -->
 
 django-admin startproject core . <!-- To startproject -->
-python manage.py startapp blog <!-- To startapp -->
+python manage.py startapp user_profile <!-- To startapp -->
 
 python manage.py makemigrations <!-- To make migrations for db model(s) -->
 python manage.py migrate <!-- To migrate db -->
 
 python manage.py runserver <!-- To open at default port or: py manage.py runserver 8001 -->
 python manage.py shell <!-- To run the shell -->
-python manage.py createsuperuser <!-- To create super user -->
+python manage.py createsuperuser <!-- To create super user e.g. python manage.py createsuperuser --username=admin --email=syntaxland@gmail.com -->
 
 pip freeze > requirements.txt <!-- To freeze requirements.txt-->
 pip install -r requirements.txt <!-- To install requirements.txt-->
@@ -30,13 +30,33 @@ pip install --upgrade pip
 pip install django python-dotenv Pillow gunicorn
 pip install djangorestframework django-cors-headers 
 pip install psycopg2-binary mysqlclient djongo
+
+<!-- custom phonenumbers config -->
+pip install "django-phonenumber-field[phonenumbers]"
+pip install babel
+<!-- models.py -->
+from phonenumber_field.modelfields import PhoneNumberField
+   
+   class CustomUser(AbstractUser):
+       # ...
+       phone_number = PhoneNumberField()
+<!-- form.py -->
+from phonenumber_field.formfields import PhoneNumberField
+from phonenumber_field.widgets import PhoneNumberPrefixWidget
+phone_number = PhoneNumberField(
+       widget=PhoneNumberPrefixWidget(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}),
+       required=True
+   )
+
 <!-- Django testing with `coverage` -->
 pip install coverage
 coverage --version
 coverage report
 coverage html
 coverage run --omit='*/venv/*' manage.py test
-py manage.py test
+
+python manage.py test
+
 <!-- flake8 and pep8 -->
 pip install flake8
 <!-- 
@@ -137,8 +157,11 @@ REACT_APP_API_URL = 'http://ec2-54-84-220-209.compute-1.amazonaws.com'
 const config = {
   apiUrl: process.env.REACT_APP_API_URL || 'http://localhost:8000',
 };
-
 export default config;
+
+<!-- CMDs -->
+npm start
+npm install
 ---------------------------------------------------------------------------------------------------
 ## React Native CMDs
 
@@ -167,6 +190,8 @@ git commit -m "updated  requirements.txt"
 git commit -m "updated settings.py"
 git commit -m "updated src+"
 git commit -m "updated buildspec.yml"
+git commit -m "new update"
+
  -->
 
 <!-- Create Remote Repo -->
@@ -177,7 +202,7 @@ git push -u origin main
 
 <!-- ### Update to remote repo -->
 git remote -v
-git push origin main 
+git push origin main
 
 <!-- ### To reinitialize -->
 ls -a
@@ -190,6 +215,13 @@ git branch -a <!--To see both -->
 <!-- Pulling from remote origin -->
 git pull origin main
 
+<!--git in a nutshell: 
+git status
+git add .
+git commit -m "new update"
+git push origin main
+
+-->
 ---------------------------------------------------------------------------------------------------
 ## Docker && Docker Compose CMDs 
 docker -v
@@ -489,7 +521,127 @@ $ unset https_proxy
 ---------------------------------------------------------------------------------------------------
 ### CI/CD | GitHub Actions | AWS CodePipeline | Jenkins
 ---------------------------------------------------------------------------------------------------
-#### GitHub Actions
+
+<!-- 
+# name: Django API AWS EB CI-CD
+
+# on:
+#   push:
+#     branches: [main]
+#   pull_request:
+#     branches: [main]
+
+# env:
+#   AWS_REGION: us-east-1
+#   EB_APPLICATION_NAME: e-traderapi
+#   EB_ENVIRONMENT_NAME: E-traderapi-env
+#   VERSION_LABEL: 2 # set version label manually
+
+# jobs:
+#   CI:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#     - name: Checkout code
+#       uses: actions/checkout@v2
+#     - name: Set up Python Environment
+#       uses: actions/setup-python@v2
+#       with:
+#         python-version: '3.x'
+#     - name: Install Dependencies
+#       run: |
+#         python -m pip install --upgrade pip
+#         pip install -r requirements.txt
+  
+#     - name: Run Tests
+#       run: |
+#         python manage.py test
+
+#   CD:
+#       needs: [CI]
+#       runs-on: ubuntu-latest
+
+#       steps:
+#       - name: Checkout source code
+#         uses: actions/checkout@v2
+
+#       - name: Generate deployment package
+#         run: zip -r deploy.zip . -x '.git*'
+
+#       - name: Deploy to EB
+#         uses: einaregilsson/beanstalk-deploy@v20
+#         with:
+#           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#           region: ${{ env.AWS_REGION }}
+#           application_name: ${{ env.EB_APPLICATION_NAME }}
+#           environment_name: ${{ env.EB_ENVIRONMENT_NAME }}
+#           version_label: ${{ env.VERSION_LABEL }}
+#           deployment_package: deploy.zip
+
+
+name: Django API AWS EB CI-CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  AWS_REGION: us-east-1
+  EB_APPLICATION_NAME: e-traderapi
+  EB_ENVIRONMENT_NAME: E-traderapi-env
+
+jobs:
+  CI:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Python Environment
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Run Tests
+        run: |
+          python manage.py test
+
+  CD:
+    needs: [CI]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+      - name: Generate deployment package
+        run: |
+          zip -r deploy.zip . -x '.git*'
+      - name: Set version label to auto update with timestamp
+        id: version
+        run: echo "VERSION_LABEL=$(date +'%Y%m%d%H%M%S')" >> $GITHUB_ENV
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v20
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          region: ${{ env.AWS_REGION }}
+          application_name: ${{ env.EB_APPLICATION_NAME }}
+          environment_name: ${{ env.EB_ENVIRONMENT_NAME }}
+          version_label: ${{ env.VERSION_LABEL }}
+          deployment_package: deploy.zip
+
+ -->
+
+
+
+
+
 
 ---------------------------------------------------------------------------------------------------
 #### AWS CodePipeline | CodeDeploy
@@ -621,32 +773,6 @@ docker push public.ecr.aws/h9x1m6c8/ecr-django-api:v1.0
 ## AWS ECR | ECS | Elastic Beanstalk | EC2 | S3
 <!-- Create EB acc -->
 create EC2 key-pair
-PuTTY-User-Key-File-2: ssh-rsa
-Encryption: none
-Comment: admin-key-pair
-Public-Lines: 6
-<!--AAAAB3NzaC1yc2EAAAADAQABAAABAQC5bJSEMsG2rmBCGlqf4qhjVZ7nr5BPAiLC
-bTGNrTqHmgwHU/oY6thayvVaGq0WfMrDIYuqGhdcrGRX+WbqoJppYwNFoI5nD/VL
-DzIzwMfm/KI74TL/T37OCAQoaolwwh+yeiTLD5Bjm4bw+bdHgo2fnu+6SpQS0J7T
-JyqLNMt6vqdNz20IQOmNS+ur3ghc+j4Z1DW4zAvtDXvlZ/XdeAmtdulUGq20DbQv
-lF9L/PATnYZIFOHdzzioJzcggGUQBaaZi8ZwLmT+wLAkjoLu4LEGlg1kxXtr1Ra1
-ZvgYno/yGQW3784NNx5GOkbV94s9JblD3DZfagpblar68Q2co5hXB
-Private-Lines: 14
-AAABACUr4TIHQtIubtmRku1OcNdJCMwFY/aSxQkY/sAaJAufFB479X0dRzYcTcc8
-ZcqGRdeMWAVHqbtIS+1e8ATFIW9TDArfPuzmRBRB/ZxmXyytJJDAeoq4EwGWlc7M
-XLUgFV6gIdQbUKTHPuv8A4PwZhfDsuczoC+NZumJhnvVn50BV+3apNsseR8VsB+K
-e8vrvgHNHo91vjnZirRuWwrfqr4gYt1eRNAGIT/edT/tuCd13IvR4efXa9X7aC9H
-9tcyRmd5qgoQCKXTZq9tcfD8sZQpGK5t5TUaI+kEUPnxUwua9yYoLBBNud+0qZFY
-UZdrR0P5UaDXgvImswXDX6q2skEAAACBAOUcSHkUW9bCibXCYvV1qECqPmSPXzBI
-L8EBQSsPr/ePulvcEoYw+NDcA1IQxzf4/C6WijrNiNGvePf9cMUmb8D8fpY5sUcP
-twcqMgos4Jcb7H3uiuQbB66j9FqOtpU2rdu+b74axsfPOt0oAEItHjzfEvT1zlx1
-mDq9n2ObL6+HAAAAgQDPL7ksMPmu6wy9Cgxyw6HDzokRBhyVgRho0aidVvv8zZcf
-B7IQZYX08PnSnIpSy6zCyrVevSnDz9CdoMdA1vmDrzXsIs6XXrBANT5mAR70huI1
-LOnPueF08epze+jlPbK9JVsTGCqxeRd41s9IcbZfw781cgDuDRWxx5SCpLHksQAA
-AIBTWCLV/+rC5PaNb3Ck4wQwTT3WGxze1htiXNw6H07LcaBkWL3lGLvWVf9bI5AX
-14NWqmtUzdug+nFgX8F5pEKApiuZE9GHZbPVhjXc7oe8icm6DWEXqBl03w91k80g
-rgD4wWM6Y75qPpyMtMe178T/GA5oud+J2X+hX7muvU1f7g==B
-Private-MAC: 37b5e0e4886ce86b514453fa49889401d1b92c2eB-->
 
 ---------------------------------------------------------------------------------------------------
 ## AWS EC2 SSH Local Connection & CI-CD Django Deplmt
@@ -671,9 +797,12 @@ sudo service codedeploy-agent status
 <!-- % If it is not running, enter this command to start the codedeploy-agent service: -->
 ##### Error Handling
 tail -f /var/log/aws/codedeploy-agent/codedeploy-agent.log
-<!-- Missing credentials - please check if this instance was started with an IAM instance profile Go to IAM console -> Roles -> Create new role
+<!-- Error:
+Missing credentials - please check if this instance was started with an IAM instance profile Go to IAM console -> 
+Soluton:
+Roles -> Create new role
 Select AWS Service -> EC2 -> Next: Permissions(don't change anything) -> Next: Tags -> Next: Review -> Give the name and click Create role.
-Go to AWS EC2 console -> select instance -> Actions -> Instance settings -> Attach/replace IAM role -> Select IAM role you just created
+Go to AWS EC2 console -> select instance -> Actions -> Security -> Attach/replace IAM role -> Select IAM role you just created
 Restart codedeploy agent: sudo service codedeploy-agent restart
 Try to deploy again and it should work
 -->
@@ -695,21 +824,44 @@ Step 2: Update Kernal command: apt update -y
 Step 3: Install Apache command: apt install httpd -y
 Step 4: Start Apache command: service httpd start
 Step 5: Check Status of Service command: service httpd status -->
+
+
 ##### Quick AWS EC2 Ubuntu SSH Ops
-ssh -i "mcdofglobal-key-pair.pem" ubuntu@ec2-54-84-220-209.compute-1.amazonaws.com
-sudo su  <!--or sudo su - ubuntu -->
-ls <!-- or ls -a or ls -l or ls -a -l -->
+ssh -i "mcdofglobal-key-pair.pem" ubuntu@ec2-18-212-11-87.compute-1.amazonaws.com
+sudo su  <!-- login as a root user  -->
+pwd <!-- checkout working dir -->
+ls -l <!-- checkout user permissions and ownerships of files and dir  -->
+chown ubuntu:root /home/ubuntu/backend_drf/ <!-- change db ownership for dir-->
 source env/bin/activate
 cd backend_drf 
-python manage.py makemigrations <!-- or python manage.py makemigrations app -->
+python manage.py migrate 
+chown ubuntu:root db.sqlite3 <!-- change db ownership for user ubuntu-->
+<!-- chmod u+rw /home/ubuntu/backend_drf/ -->
+chmod 777 db.sqlite3 <!-- grant db permissions...or  `chmod 777 db.sqlite3`, `chmod 666 db.sqlite3`-->
+chmod u+w db.sqlite3 <!-- give the directory write permissions to the user `chmod u+w /home/ubuntu/backend_drf/db.sqlite3`-->
+sudo -i
+sudo systemctl restart nginx
+sudo systemctl restart gunicorn
+sudo systemctl status gunicorn
+<!-- create .env -->
+<!-- pwd - to checkout working dir -->
+sudo nano .env - to open/create the file 
+Control + O - to save the file
+Press Enter - to execute
+Control + X - to exit
+<!-- makemigrations -->
+<!-- python manage.py makemigrations  -->
 python manage.py migrate 
 python manage.py createsuperuser
 python manage.py shell
 <!-- some db fixing -->
+nano backend_drf/settings.py <!-- DEBUG = False -->
+
 ls -l /home/ubuntu/backend_drf/db.sqlite3
 sudo chmod u+rw /home/ubuntu/backend_drf/db.sqlite3 <!-- grant the necessary permissions -->
 chmod +w /home/ubuntu/backend_drf/db.sqlite3 <!-- grant the necessary permissions -->
 chmod 664 /home/ubuntu/backend_drf/db.sqlite3 <!-- tem: `chmod 775 /home/ubuntu/backend_drf/db.sqlite3` or `chmod 774 .` sets the file permissions to read and write  -->
+
 chown <username> /home/ubuntu/backend_drf/db.sqlite3 <!-- chown ubuntu /home/ubuntu/backend_drf/db.sqlite3 -->
 cut -d: -f1 /etc/passwd <!-- to list the users -->
 <!-- granting more perm -->
@@ -723,7 +875,6 @@ gunicorn <project_name>.wsgi:application --bind 0.0.0.0:<port> <!-- gunicorn bac
 ps aux | grep gunicorn 
 sudo pkill -HUP gunicorn <!--or kill -HUP <pid> or 33708 -->
 <!-- gunicorn backend_drf.wsgi:application --bind 0.0.0.0:8080 -->
-sudo systemctl restart nginx <!-- or sudo service nginx restart -->
 <!-- 502 Bad Gateway
 nginx/1.18.0 (Ubuntu) -->
 sudo systemctl status gunicorn
@@ -738,6 +889,117 @@ sudo ufw allow 80
 <!-- Debugging django live -->
 tail -f django.log
 
+Some chmod notes:
+<!-- chmod 776 db.sqlite3
+
+- `7` stands for full read, write, and execute permissions.
+- `6` stands for read and write permissions.
+- `5` stands for read and execute permissions.
+- `4` stands for read-only permissions.
+- `3` stands for write and execute permissions.
+- `2` stands for write-only permissions.
+- `1` stands for execute-only permissions.
+- `0` stands for no permissions. -->
+
+sudo systemctl restart nginx
+sudo systemctl restart gunicorn
+sudo systemctl status gunicorn
+
+
+---------------------------------------------------------------------------------------------------
+
+##### Setting up Postgres
+**Step 1: Set Up PostgreSQL Database**
+1. Install PostgreSQL on your EC2 instance:
+   ```
+   sudo apt-get update
+   sudo apt-get install postgresql postgresql-contrib 
+   ```
+2. Create a new PostgreSQL user and database:
+   ```
+   sudo -u postgres createuser mcdofglobal
+   sudo -u postgres createdb mcdofglobal
+   ```
+
+3. Set a password for the new user:
+   ```
+   sudo -u postgres psql
+   ALTER USER mcdofglobal WITH PASSWORD 'boz1234567';
+   ```
+
+4. Grant privileges to the new user on the database:
+   ```
+   ALTER DATABASE mcdofglobal OWNER TO mcdofglobal;
+   ```
+
+**Step 2: Configure Django Settings**
+
+1. Install the `psycopg2` package to connect Django to PostgreSQL:
+   ```
+   pip install psycopg2-binary
+   ```
+
+2. Update your Django settings (`settings.py`):
+   ```python
+   DATABASES = {
+       'default': {
+           'ENGINE': 'django.db.backends.postgresql_psycopg2',
+           'NAME': 'yourdbname',
+           'USER': 'yourdbuser',
+           'PASSWORD': 'yourpassword',
+           'HOST': 'localhost',  # or your EC2 instance IP
+           'PORT': '5432',       # default PostgreSQL port
+       }
+   }
+   ```
+
+**Step 3: Set Up S3 for File Storage**
+
+1. Create an S3 bucket on the AWS console.
+
+2. Install `boto3` in your Django project to interact with AWS services:
+   ```
+   pip install boto3
+   ```
+
+3. Update your Django settings for S3 file storage (`settings.py`):
+   ```python
+   AWS_STORAGE_BUCKET_NAME = 'your-s3-bucket-name'
+   AWS_ACCESS_KEY_ID = 'your-access-key-id'
+   AWS_SECRET_ACCESS_KEY = 'your-secret-access-key'
+   AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+   AWS_QUERYSTRING_AUTH = False
+   ```
+
+4. Update your `urls.py` to include a media URL pattern for serving user-uploaded files:
+   ```python
+   from django.conf import settings
+   from django.conf.urls.static import static
+
+   urlpatterns = [
+       # ... other URL patterns ...
+   ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+   ```
+
+**Step 4: Deploy Your App**
+
+1. Deploy your Django-React app to your EC2 instance.
+
+2. Install a web server like Nginx to serve your Django app.
+
+3. Configure Nginx to serve both static files and proxy requests to your Django app.
+
+4. Restart Nginx and your Django app to apply the changes.
+
+**Step 5: Security and Maintenance**
+
+1. Secure your database and AWS credentials.
+
+2. Regularly update your packages and server to ensure security.
+
+3. Implement user authentication and access controls in your app.
+
+4. Set up backups and disaster recovery procedures.
 ---------------------------------------------------------------------------------------------------
 ### AWS S3
 <!-- % Validate access to S3 buckets -->
@@ -788,7 +1050,65 @@ MEDIA_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/media/'
 18. aws s3api get-bucket-location: Retrieves the region of an S3 bucket.
 19. aws s3api list-buckets: Lists all S3 buckets in the account.
 20. aws s3api head-object: Retrieves metadata about an object in S3 without downloading the object itself.
+---------------------------------------------------------------------------------------------------
+## AWS Elastic Beanstalk
+<!-- install awsebcli -->
+pip install --user --upgrade  awsebcli
+eb --version
+<!-- configure  .ebextensions/django.config -->
+option_settings:
+  aws:elasticbeanstalk:container:python:
+    WSGIPath: ebdjango.wsgi:application
+<!-- initiate eb to create .elasticbeanstalk/config.yml -->
+eb init -p python-3.9 app-ebdjango
+<!-- create env -->
+eb create env-ebdjango
+<!-- others -->
+eb status
+<!-- add  CNAME to settings.py allowed host -->
+ALLOWED_HOSTS = ['env-ebdjango.eba-pvwy6ir2.us-west-2.elasticbeanstalk.com']
+<!-- run deploy  -->
+eb deploy
+<!--run eb open -->
+eb open
+eb logs <!--for logs -->
 
+<!-- eb ssh --setup -->
+ssh -i "testapi-key-pair.pem" root@ec2-54-209-118-194.compute-1.amazonaws.com
+eb ssh  e-traderapi-env
+cd /var/app/current
+source /var/app/venv/*/bin/activate
+eb ssh --command "python manage.py migrate"
+<!-- sudo chown ec2-user:ec2-user db.sqlite3
+sudo chmod 664 db.sqlite3 -->
+rm -rf db.sqlite3
+python manage.py makemigrations
+python manage.py migrate
+
+pwd - to checkout working dir
+sudo touch .env - to create the file
+sudo nano .env - to open the file <!-- sudo nano trader_dashboard/settings.py -->
+Control + O - to save the file
+Press Enter - to execute
+Control + X - to exit
+
+ls -ld .
+
+
+sudo chown ec2-user .
+sudo chmod u+rwx .
+
+
+sudo chgrp ec2-user .
+sudo chmod g+rx .
+
+
+sudo chmod o+rx .
+
+sudo chown ec2-user db.sqlite3
+sudo chmod u+rw db.sqlite3
+sudo chmod 777 db.sqlite3
+sudo systemctl restart gunicorn
 ---------------------------------------------------------------------------------------------------
 ## ECS
 <!-- Setup -->
@@ -2490,7 +2810,66 @@ By default (if you do not specify SCOPE), profile scope is requested, and option
 
 You must set AUTH_PARAMS['access_type'] to offline in order to receive a refresh token on first login and on reauthentication requests (which is needed to refresh authentication tokens in the background, without involving the user’s browser). When unspecified, Google defaults to online.
 
+<!-- OR
 
+No, the steps for implementing Google login using Django Allauth are slightly different. Here's how you can implement Google login using Django Allauth:
+
+1. Install the required packages:
+  
+
+   pip install django-allauth
+   
+
+2. Add the following settings to your Django project's settings.py file:
+  
+python
+   INSTALLED_APPS = [
+       # Other installed apps
+       'allauth',
+       'allauth.account',
+       'allauth.socialaccount',
+       'allauth.socialaccount.providers.google',
+   ]
+
+   AUTHENTICATION_BACKENDS = [
+       'django.contrib.auth.backends.ModelBackend',
+       'allauth.account.auth_backends.AuthenticationBackend',
+   ]
+
+   SOCIALACCOUNT_PROVIDERS = {
+       'google': {
+           'APP': {
+               'client_id': 'your-google-oauth2-client-id',
+               'secret': 'your-google-oauth2-client-secret',
+               'key': '',
+           }
+       }
+   }
+   
+
+3. Update your project's URLs:
+  
+python
+   from django.urls import path, include
+
+   urlpatterns = [
+       # Other URL patterns
+       path('accounts/', include('allauth.urls')),
+   ]
+   
+
+4. Create a template with a login button that triggers the Google login process:
+  
+html
+   login.html 
+   {% load socialaccount %}
+
+   <a href="{% provider_login_url 'google' %}">Login with Google</a>
+   
+
+5. Customize the login view (optional):
+   - You can customize the login view by creating a custom template or extending the account/login.html template provided by Django Allauth.
+   - You can also customize the view by creating a custom view and overriding the default account_login view provided by Django Allauth. -->
 
 
 #### Create a new Django project and app
