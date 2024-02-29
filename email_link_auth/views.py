@@ -105,7 +105,7 @@ def send_verification_email(request, username, email, verification_link):
             If you didn't request this verification email, please ignore it.</p>
             <p>Best regards,<br>Softglobal Team</p>
         </body>
-        </html>
+        </html> 
         """
     sender_name = settings.EMAIL_SENDER_NAME
     sender_email = settings.EMAIL_HOST_USER

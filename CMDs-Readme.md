@@ -1,11 +1,12 @@
-# CMDs | Quickstart
+# CMDs | Quickstart | ssh
 ===================================================================================================
 ## Backend | Python | Node | .Net | Java
 ===================================================================================================
 ### Python | Django | FastAPI | Flask
 #### Django 
 python -m venv venv <!-- or python -m venv env -->
-venv\Scripts\activate.bat <!-- env\Scripts\activate.bat -->
+venv\Scripts\activate.bat 
+<!-- env\Scripts\activate.bat -->
 venv\Scripts\deactivate <!-- To deactivate for Windows -->
 
 sudo apt install python3-venv <!-- To install venv for Ubuntu -->
@@ -14,29 +15,33 @@ source venv/bin/activate <!-- To activate venv for Ubuntu/Unix MacOS -->
 deactivate <!-- To deactivate venv for Ubuntu/Unix MacOS -->
 
 django-admin startproject core . <!-- To startproject -->
-python manage.py startapp user_profile <!-- To startapp -->
+python manage.py startapp feedback <!-- To startapp -->
 
-python manage.py makemigrations <!-- To make migrations for db model(s) -->
-python manage.py migrate <!-- To migrate db -->
+python manage.py makemigrations  
+<!-- To make migrations for db model(s) -->
+python manage.py migrate 
+ <!-- To migrate db -->
 
-python manage.py runserver <!-- To open at default port or: py manage.py runserver 8001 -->
+python manage.py runserver 
+<!-- To open at default port or: py manage.py runserver 8001 -->
 python manage.py shell <!-- To run the shell -->
 python manage.py createsuperuser <!-- To create super user e.g. python manage.py createsuperuser --username=admin --email=syntaxland@gmail.com -->
 
 pip freeze > requirements.txt <!-- To freeze requirements.txt-->
-pip install -r requirements.txt <!-- To install requirements.txt-->
+pip install -r requirements.txt
+ <!-- To install requirements.txt-->
 
 pip install --upgrade pip
 pip install django python-dotenv Pillow gunicorn
 pip install djangorestframework django-cors-headers 
 pip install psycopg2-binary mysqlclient djongo
-
+pip install celery redis django-celery-results django-celery-beat 
+pip install channels
 <!-- custom phonenumbers config -->
 pip install "django-phonenumber-field[phonenumbers]"
 pip install babel
 <!-- models.py -->
 from phonenumber_field.modelfields import PhoneNumberField
-   
    class CustomUser(AbstractUser):
        # ...
        phone_number = PhoneNumberField()
@@ -144,8 +149,13 @@ npm install @reduxjs/toolkit
 npm install -g react-devtools
 npm install react-phone-number-input <!-- phone number input form with country code -->
 
-npm install axios react-router-dom@5.3.4 bootstrap redux react-redux react-bootstrap react-phone-number-input material-ui
+npm install axios react-router-dom@5.3.4 bootstrap redux react-redux react-bootstrap react-phone-number-input 
 
+npm install material-ui --force
+
+npm install @fortawesome/fontawesome-svg-core @fortawesome/react-fontawesome @fortawesome/free-solid-svg-icons
+
+npm install websocket
 <!-- .env config -->
 DANGEROUSLY_DISABLE_HOST_CHECK=true
 SKIP_PREFLIGHT_CHECK=true
@@ -160,11 +170,16 @@ const config = {
 export default config;
 
 <!-- CMDs -->
-npm start
+npm start || PORT=3001 npm start
 npm install
 ---------------------------------------------------------------------------------------------------
 ## React Native CMDs
 
+npx create-expo-app .
+npx expo start
+npx expo start --tunnel
+npm install @expo/ngrok@^4.1.0 
+npm install --global @expo/ngrok@^4.1.0
 ---------------------------------------------------------------------------------------------------
 ## Vue JS CMDs
 
@@ -784,7 +799,8 @@ t3.micro
 Navigate to the dir and run: -->
 chmod 400 instance-name.pem
 ssh -i "instance-name.pem" ubuntu@ec2-44-201-233-114.compute-1.amazonaws.com
-<!-- ssh -i "django-server.pem" ubuntu@ec2-44-201-233-114.compute-1.amazonaws.com -->
+ssh -i "paysofter-key-pair.pem" ubuntu@ec2-3-91-70-252.compute-1.amazonaws.com
+
 sudo apt update
 sudo apt install ruby-full
 sudo apt install wget
@@ -827,71 +843,63 @@ Step 5: Check Status of Service command: service httpd status -->
 
 
 ##### Quick AWS EC2 Ubuntu SSH Ops
+<!-- SSH into the project root dir -->
 ssh -i "mcdofglobal-key-pair.pem" ubuntu@ec2-18-212-11-87.compute-1.amazonaws.com
 sudo su  <!-- login as a root user  -->
 pwd <!-- checkout working dir -->
 ls -l <!-- checkout user permissions and ownerships of files and dir  -->
 chown ubuntu:root /home/ubuntu/backend_drf/ <!-- change db ownership for dir-->
+chown ubuntu:root /home/ubuntu/backend-paysofter/ <!-- change db ownership for dir-->
 source env/bin/activate
 cd backend_drf 
 python manage.py migrate 
 chown ubuntu:root db.sqlite3 <!-- change db ownership for user ubuntu-->
-<!-- chmod u+rw /home/ubuntu/backend_drf/ -->
-chmod 777 db.sqlite3 <!-- grant db permissions...or  `chmod 777 db.sqlite3`, `chmod 666 db.sqlite3`-->
-chmod u+w db.sqlite3 <!-- give the directory write permissions to the user `chmod u+w /home/ubuntu/backend_drf/db.sqlite3`-->
-sudo -i
-sudo systemctl restart nginx
-sudo systemctl restart gunicorn
-sudo systemctl status gunicorn
+chmod 777 db.sqlite3 <!-- grant db permissions...or  `chmod 775 db.sqlite3`, `chmod 666 db.sqlite3`-->
+<!-- chmod u+w db.sqlite3  -->
+<!-- give the directory write permissions to the user `chmod u+w /home/ubuntu/backend_drf/db.sqlite3`-->
+
 <!-- create .env -->
-<!-- pwd - to checkout working dir -->
 sudo nano .env - to open/create the file 
 Control + O - to save the file
 Press Enter - to execute
 Control + X - to exit
+python manage.py createsuperuser <!-- mcdofshop@gmail.com mcdofglobal@gmail.com  paysofter@gmail.com charlesmalizuSHOP@2 mcdof +234123456789 grammarpoint2@gmail.com boz1234567-->
 <!-- makemigrations -->
-<!-- python manage.py makemigrations  -->
+python manage.py makemigrations
 python manage.py migrate 
-python manage.py createsuperuser
+
+python manage.py collectstatic --noinput 
+<!-- shell -->
 python manage.py shell
+from django.contrib.auth import get_user_model
+User = get_user_model()
+User.objects.all()
+
+
 <!-- some db fixing -->
 nano backend_drf/settings.py <!-- DEBUG = False -->
 
-ls -l /home/ubuntu/backend_drf/db.sqlite3
-sudo chmod u+rw /home/ubuntu/backend_drf/db.sqlite3 <!-- grant the necessary permissions -->
-chmod +w /home/ubuntu/backend_drf/db.sqlite3 <!-- grant the necessary permissions -->
-chmod 664 /home/ubuntu/backend_drf/db.sqlite3 <!-- tem: `chmod 775 /home/ubuntu/backend_drf/db.sqlite3` or `chmod 774 .` sets the file permissions to read and write  -->
-
-chown <username> /home/ubuntu/backend_drf/db.sqlite3 <!-- chown ubuntu /home/ubuntu/backend_drf/db.sqlite3 -->
-cut -d: -f1 /etc/passwd <!-- to list the users -->
-<!-- granting more perm -->
-sudo chmod u+rw /home/ubuntu/backend_drf/requirements.txt
-sudo usermod -aG sudo ubuntu
-### Running Django on Live Sever 
-<!-- SSH into the project root dir -->
+<!-- gunicorn -->
+gunicorn <your_project_name>.wsgi:<your_application_name> --bind unix:/run/gunicorn.sock <!-- Test Gunicorn Directly: -->
 gunicorn <project_name>.wsgi:application --bind 0.0.0.0:<port> <!-- gunicorn backend_drf.wsgi:application --bind 0.0.0.0:8000 -->
-<!-- To save the logs -->
-<!-- gunicorn <project_name>.wsgi:application --bind 0.0.0.0:<port> >> logs.txt 2>&1 -->
-ps aux | grep gunicorn 
-sudo pkill -HUP gunicorn <!--or kill -HUP <pid> or 33708 -->
-<!-- gunicorn backend_drf.wsgi:application --bind 0.0.0.0:8080 -->
-<!-- 502 Bad Gateway
-nginx/1.18.0 (Ubuntu) -->
-sudo systemctl status gunicorn
-<!-- sudo systemctl start gunicorn -->
-sudo systemctl restart nginx
-sudo systemctl restart gunicorn
+sudo systemctl status gunicorn 
 
-<!-- firewalls -->
-sudo ufw status 
-sudo ufw allow 80
+<!-- nginx -->
+sudo nginx -t
+sudo tail -F /var/log/nginx/error.log
 
-<!-- Debugging django live -->
-tail -f django.log
+<!-- Stop Gunicorn: -->
+pkill -f gunicorn
 
-Some chmod notes:
+<!-- Restart Services -->
+sudo nginx -t 
+sudo systemctl reload nginx 
+sudo systemctl restart nginx 
+sudo systemctl restart gunicorn 
+
+
+<!-- Some chmod notes: -->
 <!-- chmod 776 db.sqlite3
-
 - `7` stands for full read, write, and execute permissions.
 - `6` stands for read and write permissions.
 - `5` stands for read and execute permissions.
@@ -901,11 +909,369 @@ Some chmod notes:
 - `1` stands for execute-only permissions.
 - `0` stands for no permissions. -->
 
-sudo systemctl restart nginx
-sudo systemctl restart gunicorn
-sudo systemctl status gunicorn
 
 
+<!-- In a nutshell: -->
+<!-- ssh -i "mcdofglobal-key-pair.pem" ubuntu@ec2-18-212-11-87.compute-1.amazonaws.com -->
+ssh -i "mcdofshop-key-pair.pem" ubuntu@ec2-54-172-51-171.compute-1.amazonaws.com
+source env/bin/activate 
+cd backend_drf
+
+
+ssh -i "paysofter-key-pair.pem" ubuntu@ec2-3-91-70-252.compute-1.amazonaws.com
+source venv/bin/activate
+cd backend-paysofter
+
+
+ssh -i "sellangle-key-pair.pem" ubuntu@ec2-34-202-53-39.compute-1.amazonaws.com 
+source env/bin/activate   
+cd backend-sellangle
+
+
+
+python manage.py migrate 
+
+<!-- 
+
+git status
+git add .
+git commit -m "new update"
+git push origin main
+
+
+
+ -->
+
+
+sudo nano .env 
+
+<!-- Deploying Django with Celery and Redis on Ubuntu
+Installing required packages
+Setting up Django project
+Installing Redis for Celery
+Setting up Gunicorn
+Setting up Supervisor
+Setting up Nginx
+-->
+sudo apt-get update 
+ sudo apt-get install libmysqlclient-dev python3-dev 
+
+sudo apt-get install redis-server 
+<!-- check if Redis is working -->
+redis-cli ping 
+
+PONG
+<!-- # Autostart Redi
+s on server restart -->
+sudo systemctl enable redis-server.service 
+
+sudo apt-get install supervisor 
+
+sudo service supervisor status 
+
+
+sudo nano /etc/supervisor/conf.d/celery_worker.conf 
+<!-- 
+
+; /etc/supervisor/conf.d/celery_worker.conf
+
+[program:celery]
+directory=/home/ubuntu/backend-sellangle  ; Change this to your actual working directory
+command=/home/ubuntu/env/bin/celery -A backend_drf worker -l info
+user=ubuntu
+numprocs=1
+stdout_logfile=/home/ubuntu/backend-sellangle/logs/celery/worker-access.log
+stderr_logfile=/home/ubuntu/backend-sellangle/logs/celery/worker-error.log
+stdout_logfile_maxbytes=50
+stderr_logfile_maxbytes=50
+stdout_logfile_backups=10
+stderr_logfile_backups=10 
+autostart=true
+autorestart=true
+startsecs=10
+stopwaitsecs=600
+stopasgroup=true
+priority=1000
+
+ -->
+
+<!-- 
+
+; /etc/supervisor/conf.d/celery_worker.conf
+
+[program:celery]
+directory=/home/ubuntu/backend-paysofter  ; Change this to your actual working directory
+command=/home/ubuntu/env/bin/celery -A core worker -l info
+user=ubuntu
+numprocs=1
+stdout_logfile=/home/ubuntu/backend-paysofter/logs/celery/worker-access.log
+stderr_logfile=/home/ubuntu/backend-paysofter/logs/celery/worker-error.log
+stdout_logfile_maxbytes=50
+stderr_logfile_maxbytes=50
+stdout_logfile_backups=10
+stderr_logfile_backups=10 
+autostart=true
+autorestart=true
+startsecs=10
+stopwaitsecs=600
+stopasgroup=true
+priority=1000
+
+ -->
+
+sudo nano /etc/supervisor/conf.d/celery_beat.conf 
+
+<!-- 
+
+; /etc/supervisor/conf.d/celery_beat.conf
+
+[program:celerybeat]
+directory=/home/ubuntu/backend-sellangle  ; Change this to your actual working directory
+command=/home/ubuntu/env/bin/celery -A backend_drf beat -l info
+user=ubuntu
+numprocs=1
+stdout_logfile=/home/ubuntu/backend-sellangle/logs/celery/beat-access.log
+stderr_logfile=/home/ubuntu/backend-sellangle/logs/celery/beat-error.log
+stdout_logfile_maxbytes=50
+stderr_logfile_maxbytes=50
+stdout_logfile_backups=10
+stderr_logfile_backups=10 
+autostart=true
+autorestart=true
+startsecs=10
+stopasgroup=true
+priority=999
+ -->
+
+
+<!-- 
+
+; /etc/supervisor/conf.d/celery_beat.conf
+
+[program:celerybeat]
+directory=/home/ubuntu/backend-paysofter  ; Change this to your actual working directory
+command=/home/ubuntu/env/bin/celery -A core beat -l info
+user=ubuntu
+numprocs=1
+stdout_logfile=/home/ubuntu/backend-paysofter/logs/celery/beat-access.log
+stderr_logfile=/home/ubuntu/backend-paysofter/logs/celery/beat-error.log
+stdout_logfile_maxbytes=50
+stderr_logfile_maxbytes=50
+stdout_logfile_backups=10
+stderr_logfile_backups=10 
+autostart=true
+autorestart=true
+startsecs=10
+stopasgroup=true
+priority=999
+ -->
+
+
+<!-- 
+# scripts/supervisor.sh
+#!/usr/bin/bash
+
+sudo supervisorctl reread 
+sudo supervisorctl update
+sudo supervisorctl start celerybeat
+sudo supervisorctl start celery
+
+ -->
+<!-- sellangle -->
+mkdir -p /home/ubuntu/backend-sellangle/logs/celery/
+<!-- paysofter -->
+mkdir -p /home/ubuntu/backend-paysofter/logs/celery/
+
+sudo supervisorctl reread 
+sudo supervisorctl update 
+
+
+sudo supervisorctl start celerybeat 
+sudo supervisorctl start celery 
+
+
+<!-- sudo supervisorctl start celery_worker 
+sudo supervisorctl start celery_beat -->
+
+sudo supervisorctl status 
+sudo supervisorctl tail celery 
+sudo supervisorctl tail celerybeat 
+<!-- 
+sudo /opt/codedeploy-agent/bin/codedeploy-agent stop 
+sudo /opt/codedeploy-agent/bin/codedeploy-agent start 
+ -->
+<!-- sellangle -->
+sudo touch /home/ubuntu/backend-sellangle/logs/celery/worker-access.log 
+sudo touch /home/ubuntu/backend-sellangle/logs/celery/beat-access.log
+<!-- paysofter -->
+sudo touch /home/ubuntu/backend-paysofter/logs/celery/worker-access.log 
+sudo touch /home/ubuntu/backend-paysofter/logs/celery/beat-access.log 
+
+<!-- ls /home/ubuntu/backend-sellangle/logs/celery/worker-access.log
+ls /home/ubuntu/backend-sellangle/logs/celery/beat-access.log  -->
+
+sudo journalctl -u supervisor -u celery -u celerybeat 
+
+
+/home/ubuntu/env/bin/celery -A backend_drf.celery worker --pool=solo -l info --detach
+/home/ubuntu/env/bin/celery -A backend_drf.celery beat --loglevel=info --detach
+
+/home/ubuntu/env/bin/celery -A backend_drf.celery beat stop
+
+ sudo systemctl start redis
+ sudo systemctl status redis
+
+
+<!-- 
+ sudo systemctl stop celerybeat
+sudo systemctl disable celerybeat
+
+sudo systemctl stop celery
+sudo systemctl disable celery
+
+
+sudo rm /etc/systemd/system/celerybeat.service 
+sudo rm /etc/systemd/system/celery.service 
+ -->
+
+
+
+<!-- mkdir static
+python manage.py collectstatic --noinput  -->
+
+<!-- 
+aws acm delete-certificate --region us-east-1 --certificate-arn arn:aws:acm:us-east-1:132224636260:certificate/a588c89f-d401-4bac-8791-bd56488e5d0f 
+-->
+
+
+<!-- 
+python manage.py makemigrations app marketplace user_profile 
+cd ./support/migrations
+cd 
+sudo nano 0001_initial.py 
+rm -rf migrations
+
+python manage.py migrate app
+python manage.py migrate marketplace 
+python manage.py migrate user_profile 
+python manage.py migrate 
+
+-->
+
+
+<!-- chmod 777 db.sqlite3 -->
+python manage.py createsuperuser
+<!-- 
+mcdofshop@gmail.com
+mcdof
+mcdofglobal@gmail.com
+paysofter@gmail.com 
++2341234567890
+softglobal3@gmail.com
+softglobal
+boz1234567
+charlesmalizuSHOP@2
+-->
+
+<!-- nano-->
+sudo nano .env
+nano backend_drf/settings.py
+nano core/settings.py
+nano user_profile/serializers.py
+Control + O - to save the file
+Press Enter - to execute
+Control + X - to exit
+ 
+
+<!--
+Deployment:
+
+Change =>
+settings.py: DB_HOST='mcdofshop-db1.cboipxkzxxku.us-east-1.rds.amazonaws.com'
+.env: REACT_APP_API_URL=https://backend.mcdofshop.com
+
+
+Git in a nutshell: 
+
+git status
+git add .
+git commit -m "new update"
+git push origin main
+
+
+git pretty
+`git status
+error: bad signature 0x00000000
+fatal: index file corrupt
+warning: ignoring broken ref refs/heads/main
+error: src refspec main does not match any
+error: failed to push some refs 
+to 'https://github.com/syntaxland/backend-sellangle.git' `
+
+rm -f .git/index
+rm .git/refs/heads/main
+git reset
+
+echo ref: refs/heads/main >.git/HEAD
+
+Step 1: just remove this mentioned reference
+rm .git/refs/heads/main
+Step 2: 
+git fetch
+Step 3: 
+git pull
+git push -f origin main
+
+
+
+ `C:\Users\jb\dev\sellangle\frontend-sellangle>git push -f origin main
+error: update_ref failed for ref 'refs/remotes/origin/main': cannot lock ref 'refs/remotes/origin/main': unable to resolve reference 'refs/remotes/origin/main': reference broken`
+
+git fetch origin
+git branch -a
+
+rm -rf .git/refs/remotes/origin/main
+rm -rf .git/refs/remotes/origin/master
+
+-->
+## Databases | postgres | mysql | mongo
+===================================================================================================
+### postgres CMDs
+<!-- CONNECTIONS -->
+psql -U jb -d tiktok
+\c gpt <!-- -- To connect to a diff db: -->
+
+<!-- DATABASE OPERATIONS-->
+CREATE DATABASE [db_name]; 
+<!-- To create db: 
+CREATE DATABASE mcdofshop;
+Setup packages:
+pip install psycopg2-binary
+pip install psycopg2
+python manage.py migrate
+-->
+DROP DATABASE [db_name]; <!-- To drop db: -->
+
+<!-- TABLES OPERATIONS -->
+\l <!-- -- To view db: -->
+\d <!-- -- To view list of tables and sequence: -->
+\dt <!-- -- To view tables: -->
+\dt+ <!-- -- To view table plus extra info: -->
+\dc [db_name] <!-- -- To list specific table: -->
+<!-- -- To switch db: -->
+\c paysofterdb jb;
+<!-- --To drop all -->
+DROP TABLE users;
+<!-- -- View the last inserted row b4 delete-->
+SELECT * FROM users ORDER BY id DESC LIMIT 1;
+
+<!-- To Backup -->
+--psql -h localhost -p 5432 -U analysis -d postgres
+pg_dump -U username -h hostname databasename > backup.sql
+pg_dump -U jb -h localhost gpt > backup_users.sql
+<!-- To restore: -->
+pg_restore --dbname=mydatabase mydb.backup
+pg_restore jb=gpt mydb.backup
 ---------------------------------------------------------------------------------------------------
 
 ##### Setting up Postgres
@@ -914,6 +1280,11 @@ sudo systemctl status gunicorn
    ```
    sudo apt-get update
    sudo apt-get install postgresql postgresql-contrib 
+    <!-- setup pg-db -->
+    sudo apt-get update
+    sudo apt-get install postgresql postgresql-contrib 
+    pip install psycopg2-binary
+
    ```
 2. Create a new PostgreSQL user and database:
    ```
