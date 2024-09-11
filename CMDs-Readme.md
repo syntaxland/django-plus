@@ -16,7 +16,7 @@ deactivate <!-- To deactivate venv for Ubuntu/Unix MacOS -->
 
 django-admin startproject core . <!-- To startproject -->
 python manage.py startapp feedback <!-- To startapp -->
-
+ 
 python manage.py makemigrations  
 <!-- To make migrations for db model(s) -->
 python manage.py migrate 
@@ -170,7 +170,7 @@ const config = {
 export default config;
 
 <!-- CMDs -->
-npm start || PORT=3001 npm start
+npm start || PORT=3001 npm start 
 npm install
 ---------------------------------------------------------------------------------------------------
 ## React Native CMDs
@@ -180,6 +180,9 @@ npx expo start
 npx expo start --tunnel
 npm install @expo/ngrok@^4.1.0 
 npm install --global @expo/ngrok@^4.1.0
+
+
+
 ---------------------------------------------------------------------------------------------------
 ## Vue JS CMDs
 
@@ -236,7 +239,10 @@ git add .
 git commit -m "new update"
 git push origin main
 
+
 -->
+git config --global user.email "chibuzo.okenwa@gmail.com" 
+git config --global user.name "softglobal"
 ---------------------------------------------------------------------------------------------------
 ## Docker && Docker Compose CMDs 
 docker -v
@@ -932,7 +938,7 @@ cd backend-sellangle
 python manage.py migrate 
 
 <!-- 
-
+  
 git status
 git add .
 git commit -m "new update"
