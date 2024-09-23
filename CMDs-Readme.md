@@ -183,6 +183,29 @@ npm install --global @expo/ngrok@^4.1.0
 
 
 
+<!-- Quick cmd -->
+<!-- 
+git status
+git add .
+git commit -m "new update static-files"
+git push origin main
+
+
+ -->
+venv\Scripts\activate.bat 
+<!-- 
+ipconfig 
+python manage.py runserver 192.168.43.5:8000
+python manage.py runserver 192.168.43.5:8001
+python manage.py runserver 192.168.43.5:8002
+ -->
+python manage.py makemigrations
+python manage.py migrate
+
+python manage.py createsuperuser
+pip freeze > requirements.txt 
+pip install -r requirements.txt 
+
 ---------------------------------------------------------------------------------------------------
 ## Vue JS CMDs
 
@@ -796,7 +819,7 @@ docker push public.ecr.aws/h9x1m6c8/ecr-django-api:v1.0
 create EC2 key-pair
 
 ---------------------------------------------------------------------------------------------------
-## AWS EC2 SSH Local Connection & CI-CD Django Deplmt
+## AWS EC2 SS H Local Connection & CI-CD Django Deplmt
 ## EC2 
 <!-- free tier instances -->
 t2.micro
@@ -848,8 +871,8 @@ Step 4: Start Apache command: service httpd start
 Step 5: Check Status of Service command: service httpd status -->
 
 
-##### Quick AWS EC2 Ubuntu SSH Ops
-<!-- SSH into the project root dir -->
+##### Quick AWS EC2 Ubuntu SS H Ops
+<!-- SS H into the project root dir -->
 ssh -i "mcdofglobal-key-pair.pem" ubuntu@ec2-18-212-11-87.compute-1.amazonaws.com
 sudo su  <!-- login as a root user  -->
 pwd <!-- checkout working dir -->
@@ -924,16 +947,18 @@ source env/bin/activate
 cd backend_drf
 
 
-ssh -i "paysofter-key-pair.pem" ubuntu@ec2-3-91-70-252.compute-1.amazonaws.com
+ssh -i "paysofter-key-pair.pem" ubuntu@ec2-3-91-70-252.compute-1.amazonaws.com 
 source venv/bin/activate
 cd backend-paysofter
 
 
 ssh -i "sellangle-key-pair.pem" ubuntu@ec2-34-202-53-39.compute-1.amazonaws.com 
-source env/bin/activate   
+source venv/bin/activate   
 cd backend-sellangle
 
-
+ssh -i <key> ec2-user@<ec2 ip>
+aws ec2 describe-instances --instance-ids i-08f1c3485b33043de
+ssh -v -i "sellangle-key-pair.pem" ubuntu@ec2-34-202-53-39.compute-1.amazonaws.com
 
 python manage.py migrate 
 
