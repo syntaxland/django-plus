@@ -36,6 +36,25 @@ pip install django python-dotenv Pillow gunicorn
 pip install djangorestframework django-cors-headers 
 pip install psycopg2-binary mysqlclient djongo
 pip install celery redis django-celery-results django-celery-beat 
+<!-- 
+Install redis on windows:
+run `start ms-windows-store:` n cmd as admin and install ubuntu having enabled wsl and open the ubuntu cmd. Set username and pass
+run: `curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
+
+echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list
+
+sudo apt-get update
+sudo apt-get install redis`
+sudo apt-get install redis-server
+
+sudo service redis-server start 
+sudo service redis-server restart 
+sudo service redis-server status 
+redis-server
+redis-cli 
+127.0.0.1:6379> ping
+PONG
+ -->
 pip install channels
 <!-- custom phonenumbers config -->
 pip install "django-phonenumber-field[phonenumbers]"
@@ -176,10 +195,26 @@ npm install
 ## React Native CMDs
 
 npx create-expo-app .
-npx expo start
-npx expo start --tunnel
-npm install @expo/ngrok@^4.1.0 
-npm install --global @expo/ngrok@^4.1.0
+<!-- 
+expo login
+? Username/Email Address: <your username or email>
+? Password: <your password>
+ -->
+npx expo start 
+
+ <!-- To fix
+npx expo-doctor
+npx expo install
+npx expo start -c
+npx expo install --fix 
+  -->
+
+<!-- To build:
+npx expo prebuild 
+eas build --platform android
+
+
+ -->
 
 
 
@@ -196,11 +231,11 @@ venv\Scripts\activate.bat
 <!-- 
 ipconfig 
 python manage.py runserver 192.168.43.5:8000
-python manage.py runserver 192.168.43.5:8001
-python manage.py runserver 192.168.43.5:8002
+python manage.py runserver 192.168.43.5:8001 
+python manage.py runserver 192.168.43.5:8002 
  -->
-python manage.py makemigrations
-python manage.py migrate
+python manage.py makemigrations 
+python manage.py migrate 
 
 python manage.py createsuperuser
 pip freeze > requirements.txt 
@@ -1269,13 +1304,18 @@ rm -rf .git/refs/remotes/origin/master
 ===================================================================================================
 ### postgres CMDs
 <!-- CONNECTIONS -->
-psql -U jb -d tiktok
+<!-- psql -U postgres -d postgres -->
+psql -U postgres -d sellangledb
+psql -U postgres -d paysofterdb
+psql -U postgres -d mcdofshopdb
 \c gpt <!-- -- To connect to a diff db: -->
 
 <!-- DATABASE OPERATIONS-->
 CREATE DATABASE [db_name]; 
 <!-- To create db: 
-CREATE DATABASE mcdofshop;
+CREATE DATABASE sellangledb;
+CREATE DATABASE paysofterdb;
+CREATE DATABASE mcdofshopdb;
 Setup packages:
 pip install psycopg2-binary
 pip install psycopg2
