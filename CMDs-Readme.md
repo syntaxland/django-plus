@@ -1058,7 +1058,8 @@ s on server restart -->
 sudo systemctl enable redis-server.service 
 
 sudo apt-get install supervisor 
-
+sudo systemctl enable supervisor
+sudo service supervisor start 
 sudo service supervisor status 
 
 sudo nano /etc/supervisor/conf.d/celery_worker.conf 
@@ -1068,13 +1069,13 @@ sudo nano /etc/supervisor/conf.d/celery_worker.conf
 
 [program:celery]
 directory=/home/ubuntu/backend-sellangle  ; Change this to your actual working directory
-command=/home/ubuntu/env/bin/celery -A backend_drf worker -l info
+command=/home/ubuntu/venv/bin/celery -A backend_drf worker -l info
 user=ubuntu
 numprocs=1
 stdout_logfile=/home/ubuntu/backend-sellangle/logs/celery/worker-access.log
 stderr_logfile=/home/ubuntu/backend-sellangle/logs/celery/worker-error.log
-stdout_logfile_maxbytes=50
-stderr_logfile_maxbytes=50
+stdout_logfile_maxbytes=100MB
+stderr_logfile_maxbytes=100MB
 stdout_logfile_backups=10
 stderr_logfile_backups=10 
 autostart=true
@@ -1092,13 +1093,13 @@ priority=1000
 
 [program:celery]
 directory=/home/ubuntu/backend-paysofter  ; Change this to your actual working directory
-command=/home/ubuntu/env/bin/celery -A core worker -l info
+command=/home/ubuntu/venv/bin/celery -A core worker -l info
 user=ubuntu
 numprocs=1
 stdout_logfile=/home/ubuntu/backend-paysofter/logs/celery/worker-access.log
 stderr_logfile=/home/ubuntu/backend-paysofter/logs/celery/worker-error.log
-stdout_logfile_maxbytes=50
-stderr_logfile_maxbytes=50
+stdout_logfile_maxbytes=100MB
+stderr_logfile_maxbytes=100MB
 stdout_logfile_backups=10
 stderr_logfile_backups=10 
 autostart=true
@@ -1118,13 +1119,13 @@ sudo nano /etc/supervisor/conf.d/celery_beat.conf
 
 [program:celerybeat]
 directory=/home/ubuntu/backend-sellangle  ; Change this to your actual working directory
-command=/home/ubuntu/env/bin/celery -A backend_drf beat -l info
+command=/home/ubuntu/venv/bin/celery -A backend_drf beat -l info
 user=ubuntu
 numprocs=1
 stdout_logfile=/home/ubuntu/backend-sellangle/logs/celery/beat-access.log
 stderr_logfile=/home/ubuntu/backend-sellangle/logs/celery/beat-error.log
-stdout_logfile_maxbytes=50
-stderr_logfile_maxbytes=50
+stdout_logfile_maxbytes=100MB
+stderr_logfile_maxbytes=100MB
 stdout_logfile_backups=10
 stderr_logfile_backups=10 
 autostart=true
@@ -1132,6 +1133,7 @@ autorestart=true
 startsecs=10
 stopasgroup=true
 priority=999
+
  -->
 
 
@@ -1141,13 +1143,13 @@ priority=999
 
 [program:celerybeat]
 directory=/home/ubuntu/backend-paysofter  ; Change this to your actual working directory
-command=/home/ubuntu/env/bin/celery -A core beat -l info
+command=/home/ubuntu/venv/bin/celery -A core beat -l info
 user=ubuntu
 numprocs=1
 stdout_logfile=/home/ubuntu/backend-paysofter/logs/celery/beat-access.log
 stderr_logfile=/home/ubuntu/backend-paysofter/logs/celery/beat-error.log
-stdout_logfile_maxbytes=50
-stderr_logfile_maxbytes=50
+stdout_logfile_maxbytes=100MB
+stderr_logfile_maxbytes=100MB
 stdout_logfile_backups=10
 stderr_logfile_backups=10 
 autostart=true
@@ -1168,10 +1170,18 @@ sudo supervisorctl start celerybeat
 sudo supervisorctl start celery
 
  -->
-<!-- sellangle -->
-mkdir -p /home/ubuntu/backend-sellangle/logs/celery/
 <!-- paysofter -->
-mkdir -p /home/ubuntu/backend-paysofter/logs/celery/
+sudo mkdir -p /home/ubuntu/backend-paysofter/logs/celery/ 
+<!-- sellangle -->
+sudo mkdir -p /home/ubuntu/backend-sellangle/logs/celery/
+
+<!-- 
+sudo apt-get install supervisor 
+sudo systemctl enable supervisor 
+sudo service supervisor start 
+sudo service supervisor status 
+
+ -->
 
 sudo supervisorctl reread 
 sudo supervisorctl update 
