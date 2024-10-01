@@ -1,4 +1,4 @@
-# CMDs | Quickstart | ssh
+# CMDs | Quickstart 
 ===================================================================================================
 ## Backend | Python | Node | .Net | Java
 ===================================================================================================
@@ -201,24 +201,20 @@ expo login
 ? Password: <your password>
  -->
 npx expo start 
-
- <!-- To fix
-npx expo-doctor
-npx expo install
-npx expo start -c
-npx expo install --fix 
+<!-- 
+npx expo start --port 8082 
   -->
 
-<!-- To build:
-npx expo prebuild 
-eas build --platform android
+ <!-- Quick fix
+npx expo start -c 
+ 
+npx expo-doctor 
+npx expo install
 
+rm -rf node_modules package-lock.json 
+npm install 
+-->
 
- -->
-
-
-
-<!-- Quick cmd -->
 <!-- 
 git status
 git add .
@@ -227,6 +223,13 @@ git push origin main
 
 
  -->
+#### To build:
+npx expo prebuild 
+<!-- npm install -g eas-cli
+eas --version -->
+eas build --platform android 
+
+#### py quick cmd
 venv\Scripts\activate.bat 
 <!-- 
 ipconfig 
@@ -240,6 +243,24 @@ python manage.py migrate
 python manage.py createsuperuser
 pip freeze > requirements.txt 
 pip install -r requirements.txt 
+
+<!-- fix error:
+deactivate  
+rm -rf venv  
+py -m venv venv  
+venv\Scripts\activate  
+pip install -r requirements.txt 
+
+python manage.py runserver --verbosity 3 
+python manage.py runserver 192.168.43.5:8002 --verbosity 3 
+
+python manage.py showmigrations 
+python manage.py check 
+python manage.py makemigrations marketplace 
+
+pip install xhtml2pdf==0.2.16
+
+ -->
 
 ---------------------------------------------------------------------------------------------------
 ## Vue JS CMDs
@@ -312,7 +333,7 @@ docker images
 docker rmi <image-name-or-id>
 docker build -t <image-name-or-id> . <!-- To build image. Add `.` to build at cwd -->
 docker run -p 8000:8000 <image-name-or-id> <!-- To run built image -->
-<!-- Psshing Images to Docker Hub: -->
+<!-- Ps shing Images to Docker Hub: -->
 docker login
 docker tag <image-name-or-id> <username>/<repository>:<tag>
 docker push <username>/<repository>:<tag> 
@@ -865,9 +886,9 @@ chmod 400 instance-name.pem
 ssh -i "instance-name.pem" ubuntu@ec2-44-201-233-114.compute-1.amazonaws.com
 ssh -i "paysofter-key-pair.pem" ubuntu@ec2-3-91-70-252.compute-1.amazonaws.com
 
-sudo apt update
-sudo apt install ruby-full
-sudo apt install wget
+sudo apt update 
+sudo apt install ruby-full 
+sudo apt install wget 
 wget https://aws-codedeploy-us-east-1.s3.us-east-1.amazonaws.com/latest/install
 chmod +x ./install
 <!-- to install the codedeploy-agent, run this command: -->
@@ -875,7 +896,7 @@ sudo ./install auto > /tmp/logfile
 <!-- Here we are logging the output of the installation to the /tmp/logfile file. To check if the codedeploy-agent is running, enter this command: -->
 sudo service codedeploy-agent status
 <!-- % If it is not running, enter this command to start the codedeploy-agent service: -->
-##### Error Handling
+##### Configure (IAM role) Missing credentials 
 tail -f /var/log/aws/codedeploy-agent/codedeploy-agent.log
 <!-- Error:
 Missing credentials - please check if this instance was started with an IAM instance profile Go to IAM console -> 
@@ -927,7 +948,7 @@ sudo nano .env - to open/create the file
 Control + O - to save the file
 Press Enter - to execute
 Control + X - to exit
-python manage.py createsuperuser <!-- mcdofshop@gmail.com mcdofglobal@gmail.com  paysofter@gmail.com charlesmalizuSHOP@2 mcdof +234123456789 grammarpoint2@gmail.com boz1234567-->
+python manage.py createsuperuser <!-- mcdofshop@gmail.com softglobal3@gmail.com  paysofter@gmail.com charlesmalizuSHOP@2 mcdof +234123456789 grammarpoint2@gmail.com boz1234567-->
 <!-- makemigrations -->
 python manage.py makemigrations
 python manage.py migrate 
@@ -982,14 +1003,15 @@ source env/bin/activate
 cd backend_drf
 
 
-ssh -i "paysofter-key-pair.pem" ubuntu@ec2-3-91-70-252.compute-1.amazonaws.com 
+ssh -i "paysoftert3-key-pair.pem" ubuntu@ec2-54-242-116-136.compute-1.amazonaws.com
 source venv/bin/activate
 cd backend-paysofter
 
 
-ssh -i "sellangle-key-pair.pem" ubuntu@ec2-34-202-53-39.compute-1.amazonaws.com 
+ssh -i "sellanglet3-key-pair.pem" ubuntu@ec2-54-234-211-71.compute-1.amazonaws.com
 source venv/bin/activate   
 cd backend-sellangle
+
 
 ssh -i <key> ec2-user@<ec2 ip>
 aws ec2 describe-instances --instance-ids i-08f1c3485b33043de
@@ -998,19 +1020,23 @@ ssh -v -i "sellangle-key-pair.pem" ubuntu@ec2-34-202-53-39.compute-1.amazonaws.c
 python manage.py migrate 
 
 <!-- 
-  
 git status
 git add .
 git commit -m "new update"
 git push origin main
 
 
-
  -->
-
 
 sudo nano .env 
 
+#### Setup postgres db
+sudo apt-get update
+sudo apt-get install libpq-dev libffi-dev python3-dev build-essential
+sudo apt-get install postgresql postgresql-contrib 
+pip install psycopg2-binary 
+
+#### Setup Celery and Redis
 <!-- Deploying Django with Celery and Redis on Ubuntu
 Installing required packages
 Setting up Django project
@@ -1034,7 +1060,6 @@ sudo systemctl enable redis-server.service
 sudo apt-get install supervisor 
 
 sudo service supervisor status 
-
 
 sudo nano /etc/supervisor/conf.d/celery_worker.conf 
 <!-- 
