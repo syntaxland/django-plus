@@ -1057,6 +1057,7 @@ PONG
 s on server restart -->
 sudo systemctl enable redis-server.service 
 
+#### Setup supervisor
 sudo apt-get install supervisor 
 sudo systemctl enable supervisor
 sudo service supervisor start 
@@ -1180,6 +1181,20 @@ sudo apt-get install supervisor
 sudo systemctl enable supervisor 
 sudo service supervisor start 
 sudo service supervisor status 
+
+sudo mkdir -p /var/run/supervisor
+sudo chown -R ubuntu:ubuntu /var/run/supervisor
+
+sudo mkdir -p /var/log/supervisor
+sudo chown -R ubuntu:ubuntu /var/log/supervisor
+
+sudo mkdir -p /var/run/supervisor /var/log/supervisor
+sudo chown -R ubuntu:ubuntu /var/run/supervisor /var/log/supervisor
+
+sudo /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
+
+sudo service supervisor restart 
+sudo kill 38993
 
  -->
 
