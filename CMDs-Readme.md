@@ -49,6 +49,7 @@ sudo apt-get install redis-server
 
 sudo service redis-server start 
 sudo service redis-server restart 
+sudo service redis-server stop 
 sudo service redis-server status 
 redis-server
 redis-cli 
@@ -1046,10 +1047,21 @@ Setting up Supervisor
 Setting up Nginx
 -->
 sudo apt-get update 
- sudo apt-get install libmysqlclient-dev python3-dev 
-
+sudo apt-get install libmysqlclient-dev python3-dev 
 sudo apt-get install redis-server 
-<!-- check if Redis is working -->
+<!-- check if Redis is working 
+sudo apt-get update
+sudo apt-get install redis
+sudo apt-get install redis-server
+sudo service redis-server start 
+sudo service redis-server restart 
+sudo service redis-server stop 
+sudo service redis-server status 
+redis-server
+redis-cli 
+127.0.0.1:6379> ping
+PONG
+-->
 redis-cli ping 
 
 PONG
@@ -1173,7 +1185,12 @@ sudo supervisorctl start celery
  -->
 <!-- paysofter -->
 sudo mkdir -p /home/ubuntu/backend-paysofter/logs/celery/ 
+sudo touch /home/ubuntu/backend-paysofter/logs/celery/worker-access.log 
+sudo touch /home/ubuntu/backend-paysofter/logs/celery/beat-access.log 
+<!-- sudo rm -rf /home/ubuntu/backend-sellangle/logs -->
 <!-- sellangle -->
+sudo touch /home/ubuntu/backend-sellangle/logs/celery/worker-access.log 
+sudo touch /home/ubuntu/backend-sellangle/logs/celery/beat-access.log
 sudo mkdir -p /home/ubuntu/backend-sellangle/logs/celery/
 
 <!-- 
@@ -1181,30 +1198,15 @@ sudo apt-get install supervisor
 sudo systemctl enable supervisor 
 sudo service supervisor start 
 sudo service supervisor status 
-
-sudo mkdir -p /var/run/supervisor
-sudo chown -R ubuntu:ubuntu /var/run/supervisor
-
-sudo mkdir -p /var/log/supervisor
-sudo chown -R ubuntu:ubuntu /var/log/supervisor
-
-sudo mkdir -p /var/run/supervisor /var/log/supervisor
-sudo chown -R ubuntu:ubuntu /var/run/supervisor /var/log/supervisor
-
-sudo /usr/bin/supervisord -n -c /etc/supervisor/supervisord.conf
-
+sudo service supervisor stop 
 sudo service supervisor restart 
-sudo kill 38993
-
  -->
 
 sudo supervisorctl reread 
 sudo supervisorctl update 
 
-
 sudo supervisorctl start celerybeat 
 sudo supervisorctl start celery 
-
 
 <!-- sudo supervisorctl start celery_worker 
 sudo supervisorctl start celery_beat -->
@@ -1212,31 +1214,14 @@ sudo supervisorctl start celery_beat -->
 sudo supervisorctl status 
 sudo supervisorctl tail celery 
 sudo supervisorctl tail celerybeat 
-<!-- 
-sudo /opt/codedeploy-agent/bin/codedeploy-agent stop 
-sudo /opt/codedeploy-agent/bin/codedeploy-agent start 
- -->
-<!-- sellangle -->
-sudo touch /home/ubuntu/backend-sellangle/logs/celery/worker-access.log 
-sudo touch /home/ubuntu/backend-sellangle/logs/celery/beat-access.log
-<!-- paysofter -->
-sudo touch /home/ubuntu/backend-paysofter/logs/celery/worker-access.log 
-sudo touch /home/ubuntu/backend-paysofter/logs/celery/beat-access.log 
-
-<!-- ls /home/ubuntu/backend-sellangle/logs/celery/worker-access.log
-ls /home/ubuntu/backend-sellangle/logs/celery/beat-access.log  -->
 
 sudo journalctl -u supervisor -u celery -u celerybeat 
-
+sudo journalctl -u supervisor -u celerybeat 
 
 /home/ubuntu/env/bin/celery -A backend_drf.celery worker --pool=solo -l info --detach
 /home/ubuntu/env/bin/celery -A backend_drf.celery beat --loglevel=info --detach
 
 /home/ubuntu/env/bin/celery -A backend_drf.celery beat stop
-
- sudo systemctl start redis
- sudo systemctl status redis
-
 
 <!-- 
  sudo systemctl stop celerybeat
