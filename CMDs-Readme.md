@@ -1131,7 +1131,7 @@ sudo nano /etc/supervisor/conf.d/celery_beat.conf
 ; /etc/supervisor/conf.d/celery_beat.conf
 
 [program:celerybeat]
-directory=/home/ubuntu/backend-sellangle  ; Change this to your actual working directory
+directory=/home/ubuntu/backend-sellangle 
 command=/home/ubuntu/venv/bin/celery -A backend_drf beat -l info
 user=ubuntu
 numprocs=1
@@ -1155,7 +1155,7 @@ priority=999
 ; /etc/supervisor/conf.d/celery_beat.conf
 
 [program:celerybeat]
-directory=/home/ubuntu/backend-paysofter  ; Change this to your actual working directory
+directory=/home/ubuntu/backend-paysofter 
 command=/home/ubuntu/venv/bin/celery -A core beat -l info
 user=ubuntu
 numprocs=1
@@ -1172,19 +1172,9 @@ stopasgroup=true
 priority=999
  -->
 
-
-<!-- 
-# scripts/supervisor.sh
-#!/usr/bin/bash
-
-sudo supervisorctl reread 
-sudo supervisorctl update
-sudo supervisorctl start celerybeat
-sudo supervisorctl start celery
-
- -->
 <!-- paysofter -->
 sudo mkdir -p /home/ubuntu/backend-paysofter/logs/celery/ 
+sudo chown -R ubuntu:ubuntu /home/ubuntu/backend-paysofter/logs/celery
 sudo touch /home/ubuntu/backend-paysofter/logs/celery/worker-access.log 
 sudo touch /home/ubuntu/backend-paysofter/logs/celery/beat-access.log 
 <!-- sudo rm -rf /home/ubuntu/backend-sellangle/logs -->
@@ -1200,6 +1190,9 @@ sudo service supervisor start
 sudo service supervisor status 
 sudo service supervisor stop 
 sudo service supervisor restart 
+
+sudo tail -f /var/log/supervisor/supervisord.log
+
  -->
 
 sudo supervisorctl reread 
@@ -1207,16 +1200,19 @@ sudo supervisorctl update
 
 sudo supervisorctl start celerybeat 
 sudo supervisorctl start celery 
-
-<!-- sudo supervisorctl start celery_worker 
-sudo supervisorctl start celery_beat -->
-
+<!-- 
+sudo supervisorctl restart celery
+sudo supervisorctl restart celerybeat 
+ -->
 sudo supervisorctl status 
 sudo supervisorctl tail celery 
 sudo supervisorctl tail celerybeat 
 
 sudo journalctl -u supervisor -u celery -u celerybeat 
 sudo journalctl -u supervisor -u celerybeat 
+sudo journalctl -u celerybeat
+sudo tail -f /home/ubuntu/backend-paysofter/logs/celery/worker-error.log
+sudo tail -n 50 /home/ubuntu/backend-paysofter/logs/celery/worker-error.log
 
 /home/ubuntu/env/bin/celery -A backend_drf.celery worker --pool=solo -l info --detach
 /home/ubuntu/env/bin/celery -A backend_drf.celery beat --loglevel=info --detach
