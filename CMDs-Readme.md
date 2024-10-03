@@ -263,6 +263,14 @@ pip install xhtml2pdf==0.2.16
 
  -->
 
+ #### npm (paysofter) packages
+npm login 
+npm publish 
+
+<!-- install paysofer
+npm i react-paysofter@latest (web)
+npm i react-native-paysofter@latest (mobile)
+ -->
 ---------------------------------------------------------------------------------------------------
 ## Vue JS CMDs
 
